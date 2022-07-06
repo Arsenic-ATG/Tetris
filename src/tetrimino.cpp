@@ -1,0 +1,51 @@
+#include "tetrimino.hpp"
+#include "point.hpp"
+#include <array>
+
+// TODO: fill more tetrimino data
+/**
+0 -> empty,
+1 -> filled
+2 -> pivot
+*/
+constexpr int tetrimino_collection[7][4][5][5] = {
+  // Square
+  { { { 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0 },
+      { 0, 0, 2, 1, 0 },
+      { 0, 0, 1, 1, 0 },
+      { 0, 0, 0, 0, 0 } },
+    { { 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0 },
+      { 0, 0, 2, 1, 0 },
+      { 0, 0, 1, 1, 0 },
+      { 0, 0, 0, 0, 0 } },
+    { { 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0 },
+      { 0, 0, 2, 1, 0 },
+      { 0, 0, 1, 1, 0 },
+      { 0, 0, 0, 0, 0 } },
+    { { 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0 },
+      { 0, 0, 2, 1, 0 },
+      { 0, 0, 1, 1, 0 },
+      { 0, 0, 0, 0, 0 } } },
+};
+
+constexpr int initial_pos[7][4][2] = {
+  /* Square */
+  { { -2, -3 }, { -2, -3 }, { -2, -3 }, { -2, -3 } },
+};
+
+auto
+tetrimino::get_mino_type (int type, int rotation, point pt) -> int
+{
+  return tetrimino_collection[type][rotation][pt.m_x][pt.m_y];
+}
+
+auto
+tetrimino::get_intial_position (int type, int rotation) -> point
+{
+  return point (initial_pos[type][rotation][0],
+                initial_pos[type][rotation][1]);
+}
