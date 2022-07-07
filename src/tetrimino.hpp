@@ -3,6 +3,10 @@
 
 #include "point.hpp"
 
+constexpr int num_of_types = 7;
+constexpr int num_of_rotations = 4;
+constexpr int block_size = 5;
+
 class tetrimino
 {
   public:
