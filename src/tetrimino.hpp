@@ -11,7 +11,7 @@ class tetrimino
 {
   public:
   auto get_mino_type (int type, int rotation, point pt) -> int;
-  auto get_intial_position (int type, int rotation) -> point;
+  auto get_initial_position (int type, int rotation) -> point;
 };
 
 #endif /* TETRIMINO_H */

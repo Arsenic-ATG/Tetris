@@ -5,8 +5,13 @@
 #include <array>
 #include <memory>
 
+constexpr int mino_size = 16;
 constexpr int matrix_width = 10;
 constexpr int matrix_height = 20;
+
+constexpr int matrix_position = 320;
+constexpr int min_vertical_margin = 20;
+constexpr int min_horizontal_margin = 20;
 
 using grid = std::array<std::array<int, matrix_width>, matrix_height>;
 
@@ -15,6 +20,7 @@ class matrix
 public:
   matrix (std::unique_ptr<tetrimino> tetriminos, int screen_height);
 
+  auto get_pixel_pos (const point pos) -> point;
   auto is_empty_place (point pt) -> bool;
   auto is_movement_possible (point pt, int type, int rotation) -> bool;
   auto add_tetrimino (point pt, int type, int rotation) -> void;

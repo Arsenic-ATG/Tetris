@@ -7,6 +7,18 @@ matrix::matrix (std::unique_ptr<tetrimino> tetriminos, int screen_height)
 }
 
 auto
+matrix::get_pixel_pos (const point pos) -> point
+{
+  auto x_pos = ((m_screen_height - (mino_size * matrix_height))
+                + (pos.m_x * block_size));
+
+  auto y_pos = ((matrix_position - (mino_size * (matrix_width / 2)))
+                + (pos.m_y * block_size));
+
+  return point (x_pos, y_pos);
+}
+
+auto
 matrix::is_empty_place (point pt) -> bool
 {
   return (m_matrix[pt.m_x][pt.m_y]);
@@ -75,7 +87,6 @@ matrix::is_game_over () -> bool
       return true;
   return false;
 }
-
 
 auto
 matrix::clear_line (int line_number) -> void

@@ -46,7 +46,7 @@ tetrimino::get_mino_type (int type, int rotation, point pt) -> int
 }
 
 auto
-tetrimino::get_intial_position (int type, int rotation) -> point
+tetrimino::get_initial_position (int type, int rotation) -> point
 {
   return point (initial_pos[type][rotation][0],
                 initial_pos[type][rotation][1]);
