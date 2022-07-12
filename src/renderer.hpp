@@ -1,8 +1,11 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "SDL_ttf.h"
+//#include "SDL_ttf.h"
 #include "utils.hpp"
+#include <string>
+
+struct TTF_Font; // temporary ( change when ttf font is installed)
 
 class Texture;
 
@@ -36,6 +39,8 @@ public:
                               const uint32_t rgb_color) -> void;
   auto draw_text (const std::string &text, const coords loc,
                   const uint32_t rgb_color) -> void;
+  auto draw_text (const char *text, const coords loc, const uint32_t rgb_color)
+      -> void;
 
 private:
   unsigned int m_width;
