@@ -73,7 +73,9 @@ public:
 
 private:
   auto generate_tetromino () -> bool;
-  auto summon_tetromino_to_board () -> void;
+  auto summon_tetromino_to_board (
+      board &p_board, const tetromino_instance &p_tetromino_instance) -> void;
+  //  auto summon_tetromino_to_board () -> void;
 
   enum class state
   {

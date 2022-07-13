@@ -1,11 +1,9 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-//#include "SDL_ttf.h"
 #include "utils.hpp"
+#include <SDL2/SDL_ttf.h>
 #include <string>
-
-struct TTF_Font; // temporary ( change when ttf font is installed)
 
 class Texture;
 
@@ -33,10 +31,11 @@ public:
     return m_height;
   }
 
-  auto draw_rectangle (const coords loc, const int height,
+  auto draw_rectangle (const coords loc, const int width, const int height,
                        const uint32_t rgb_color) -> void;
-  auto draw_filled_rectangle (const coords loc, const int height,
-                              const uint32_t rgb_color) -> void;
+  auto draw_filled_rectangle (const coords loc, const int width,
+                              const int height, const uint32_t rgb_color)
+      -> void;
   auto draw_text (const std::string &text, const coords loc,
                   const uint32_t rgb_color) -> void;
   auto draw_text (const char *text, const coords loc, const uint32_t rgb_color)

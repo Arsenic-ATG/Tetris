@@ -83,7 +83,7 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
 
 // helpers
 static auto
-is_overlap (const tetromino_instance &p_instance, const board &p_board)
+is_overlap (const tetromino_instance &p_instance, const p_board &p_board)
 {
   const auto tet
       = tetromino_data[static_cast<int> (p_instance.m_tetromino_type)];
@@ -94,7 +94,7 @@ is_overlap (const tetromino_instance &p_instance, const board &p_board)
       const int x = p_instance.m_pos.x + block_coords[i].x;
       const int y = p_instance.m_pos.y + block_coords[i].y;
 
-      // overlaping with board borders
+      // overlaping with p_board borders
       if (x < 0 || x >= static_cast<int> (p_board.width) || y < 0
           || y >= static_cast<int> (p_board.height))
         return true;
@@ -106,7 +106,7 @@ is_overlap (const tetromino_instance &p_instance, const board &p_board)
 }
 
 static auto
-set_block (board &p_board, const coords i, const unsigned int val)
+set_block (p_board &p_board, const coords i, const unsigned int val)
 {
   // FIXME: assert that "i" should always be windin bounds
   p_board.static_blocks[i.x * p_board.width + i.y] = val;
@@ -236,7 +236,7 @@ game::draw_playing (renderer &p_renderer) -> void
 {
   static auto block_size_in_pixels = 32;
 
-  // draw board
+  // draw p_board
   auto board_width_in_pixels = m_board.width * block_size_in_pixels;
   auto board_height_in_pixels = m_board.height * block_size_in_pixels;
 
@@ -265,9 +265,10 @@ game::draw_playing (renderer &p_renderer) -> void
               block_rgb_color = tetromino_data[block_state].color;
             }
           p_renderer.draw_filled_rectangle (
-              coords (x, y), block_size_in_pixels, block_rgb_color);
+              coords (x, y), block_size_in_pixels, block_size_in_pixels,
+              block_rgb_color);
           p_renderer.draw_rectangle (coords (x, y), block_size_in_pixels,
-                                     0x404040ff);
+                                     block_size_in_pixels, 0x404040ff);
         }
     }
 
@@ -286,6 +287,7 @@ game::draw_playing (renderer &p_renderer) -> void
                      + (m_active_tetromino.m_pos.y + block_coords[i].y)
                            * block_size_in_pixels;
       p_renderer.draw_filled_rectangle (coords (x, y), block_size_in_pixels,
+                                        block_size_in_pixels,
                                         tetromino_color_rgb);
     }
 
@@ -390,12 +392,12 @@ game::generate_tetromino () -> bool
 
 auto
 game::summon_tetromino_to_board (
-    const board &p_board, const tetromino_instance &p_tetromino_instance)
+   board &p_board,const tetromino_instance &p_tetromino_instance)
     -> void
 {
-  const auto &tet = tetromino_data[p_tetroimino_instance.m_tetromino_type];
-  const auto &block_coords
-      = tet.m_block_coords[p_tetromino_instance.m_rotation];
+  const auto &tet = tetromino_data[static_cast<int> (
+      p_tetromino_instance.m_tetromino_type)];
+  const auto &block_coords = tet.block_coords[p_tetromino_instance.m_rotation];
   for (auto i = 0u; i < tetromino::block_num; ++i)
     {
       const int x = p_tetromino_instance.m_pos.x + block_coords[i].x;
@@ -403,17 +405,17 @@ game::summon_tetromino_to_board (
 
       // TODO: assert that tetromino doesn't go out of board
 
-      board.static_blocks[x + y * board.width]
+      p_board.static_blocks[x + y * p_board.width]
           = static_cast<unsigned int> (p_tetromino_instance.m_tetromino_type);
     }
 
   // clear rows
-  for (auto y = 0u; y < board.height; ++y)
+  for (auto y = 0u; y < p_board.height; ++y)
     {
       bool current_row_filled = true;
-      for (auto x = 0u; x < board.width; ++x)
+      for (auto x = 0u; x < p_board.width; ++x)
         {
-          if (board.static_blocks[x + y * board.width] = -1)
+          if (p_board.static_blocks[x + y * p_board.width] == -1)
             {
               current_row_filled = false;
               break;
@@ -423,10 +425,10 @@ game::summon_tetromino_to_board (
         {
           for (auto i = y; i > 0; --i)
             {
-              for (auto j = 0; j < board.width; ++j)
+              for (auto j = 0u; j < p_board.width; ++j)
                 {
-                  board.static_blocks[j + i * board.width]
-                      = board.static_blocks[j + (i - 1) * board.width];
+                  p_board.static_blocks[j + i * p_board.width]
+                      = p_board.static_blocks[j + (i - 1) * p_board.width];
                 }
             }
         }

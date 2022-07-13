@@ -1,5 +1,8 @@
 #include "renderer.hpp"
-#include "SDL.h"
+/*TODO: location of SDL.h might change depending on the operating system.
+handle that here.  */
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <cstdio>
 
 // helper functions
@@ -8,10 +11,10 @@ static auto
 make_sdl_color (uint32_t rgb_color)
 {
   SDL_Color color;
-  color.r = (unsigned char)((rgba >> 24) & 0xff);
-  color.g = (unsigned char)((rgba >> 16) & 0xff);
-  color.b = (unsigned char)((rgba >> 8) & 0xff);
-  color.a = (unsigned char)((rgba >> 0) & 0xff);
+  color.r = (unsigned char)((rgb_color >> 24) & 0xff);
+  color.g = (unsigned char)((rgb_color >> 16) & 0xff);
+  color.b = (unsigned char)((rgb_color >> 8) & 0xff);
+  color.a = (unsigned char)((rgb_color >> 0) & 0xff);
   return color;
 }
 
@@ -43,7 +46,7 @@ renderer::renderer (SDL_Window &window, unsigned int width,
     print_renderer_info (renderer_info);
   }
   Uint32 renderer_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
-  auto rendrer_index = -1;
+  auto renderer_index = -1;
   m_sdl_renderer
       = SDL_CreateRenderer (&window, renderer_index, renderer_flags);
   if (!m_sdl_renderer)
@@ -65,23 +68,23 @@ renderer::renderer (SDL_Window &window, unsigned int width,
   SDL_GetWindowSize (&window, &display_width, &display_height);
   printf ("Display size = (%d, %d)\n", display_width, display_height);
   printf ("Renderer logical size = (%u, %u)\n", width, height);
-  if (display_width != static_cast<int> width
-      || display_height != static_cast<int> height)
+  if (display_width != static_cast<int> (width)
+      || display_height != static_cast<int> (height))
     {
       printf ("logical size != display size (%u, %u) vs (%u, %u). Scaling "
               "will be applied\n",
-              width, height, deisplay_width, display_height);
+              width, height, display_width, display_height);
     }
   const auto display_aspect
       = static_cast<double> (display_width) / display_height;
-  const auto aspect = stati_cast<double> (width) / height;
+  const auto aspect = static_cast<double> (width) / height;
   if (display_aspect != display_aspect)
     {
       printf (
           "logical aspect != display aspect. Letterboxing will be applied\n");
     }
 
-  SDL_RenderSetLogicalSize (m_sdl_renderer, Width, Height);
+  SDL_RenderSetLogicalSize (m_sdl_renderer, width, height);
 
   SDL_SetHint (SDL_HINT_RENDER_SCALE_QUALITY,
                "linear"); // make the scaled rendering look smoother
@@ -91,7 +94,8 @@ renderer::renderer (SDL_Window &window, unsigned int width,
   if (!m_font)
     {
       fprintf (stderr, "TTF_OpenFont failed: %s\n", TTF_GetError ());
-      HP_FATAL_ERROR ("Failed to open font")
+      // failed to open file
+      // TODO: terminate executeion and raise error here
     }
 }
 
@@ -115,25 +119,25 @@ renderer::present () -> void
 }
 
 auto
-renderer::draw_rectangle (const coords loc, const int height,
+renderer::draw_rectangle (const coords loc, const int width, const int height,
                           const uint32_t rgb_color) -> void
 {
-  auto color = MakeSDL_Colour (rgb_color);
-  SDL_SetRenderDrawColor (m_sld_renderer, color.r, color.g, color.b, color.a);
-
-  SDL_Rect rect = { x, y, w, h };
+  auto color = make_sdl_color (rgb_color);
+  SDL_SetRenderDrawColor (m_sdl_renderer, color.r, color.g, color.b, color.a);
+  SDL_Rect rect = { loc.x, loc.y, width, height };
   SDL_RenderDrawRect (m_sdl_renderer, &rect);
 }
 
 auto
-renderer::draw_filled_rectangle (const coords loc, const int height,
-                                 const uint32_t rgb_color) -> void
+renderer::draw_filled_rectangle (const coords loc, const int width,
+                                 const int height, const uint32_t rgb_color)
+    -> void
 {
-  auto color = MakeSDL_Colour (rgb_color);
+  auto color = make_sdl_color (rgb_color);
   SDL_SetRenderDrawColor (m_sdl_renderer, color.r, color.g, color.b, color.a);
 
-  SDL_Rect rect = { x, y, w, h };
-  SDL_RenderFillRect (m_pSdlRenderer, &rect);
+  SDL_Rect rect = { loc.x, loc.y, width, height };
+  SDL_RenderFillRect (m_sdl_renderer, &rect);
 }
 
 auto
@@ -149,15 +153,15 @@ renderer::draw_text (const char *text, const coords loc,
 {
   SDL_assert (text);
 
-  SDL_Color color = MakeSDL_Colour (rgba);
+  SDL_Color color = make_sdl_color (rgb_color);
 
   SDL_Surface *sdl_surface = TTF_RenderText_Blended (m_font, text, color);
   SDL_Texture *texture
-      = SDL_CreateTextureFromSurface (m_pSdlRenderer, sdl_surface);
+      = SDL_CreateTextureFromSurface (m_sdl_renderer, sdl_surface);
   int width, height;
   SDL_QueryTexture (texture, NULL, NULL, &width, &height);
   SDL_Rect dst_rect = { loc.x, loc.y, width, height };
-  SDL_RenderCopy (m_pSdlRenderer, texture, nullptr, &dst_rect);
+  SDL_RenderCopy (m_sdl_renderer, texture, nullptr, &dst_rect);
   SDL_DestroyTexture (texture);
   SDL_FreeSurface (sdl_surface);
 }
