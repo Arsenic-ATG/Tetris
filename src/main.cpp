@@ -2,22 +2,27 @@
 This file contains the mail loop
 */
 
-//#include "tetris.h"
-#include "screen.hpp"
-#include "matrix.hpp"
-// TODO: include windows.h incse we are on a windows system
+#include "app.hpp"
+#include <SDL2/SDL.h>
+#include <cstdio>
 
-
-// TODO: winmain should be the start point on windows system
-int main()
+int
+main ()
 {
-  // screen renderer
-  screen scr;
+  bool is_full_screen = false;
+  unsigned int disp_width = 1280;
+  unsigned int disp_height = 720;
 
-  // tetrimino's data
-  auto tetriminos = std::make_unique <tetrimino> ();
+  app application;
+  if (!application.init (is_full_screen, disp_width, disp_height))
+    {
+      printf ("ERROR - App failed to initialise\n");
+      application.shut_down ();
+      return 1;
+    }
 
-  // booard
+  application.run ();
+  application.shut_down ();
 
   return 0;
 }
