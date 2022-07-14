@@ -83,7 +83,7 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
 
 // helpers
 static auto
-is_overlap (const tetromino_instance &p_instance, const p_board &p_board)
+is_overlap (const tetromino_instance &p_instance, const board &p_board)
 {
   const auto tet
       = tetromino_data[static_cast<int> (p_instance.m_tetromino_type)];
@@ -106,7 +106,7 @@ is_overlap (const tetromino_instance &p_instance, const p_board &p_board)
 }
 
 static auto
-set_block (p_board &p_board, const coords i, const unsigned int val)
+set_block (board &p_board, const coords i, const unsigned int val)
 {
   // FIXME: assert that "i" should always be windin bounds
   p_board.static_blocks[i.x * p_board.width + i.y] = val;

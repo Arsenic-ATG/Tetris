@@ -37,14 +37,14 @@ renderer::renderer (SDL_Window &window, unsigned int width,
       m_font (nullptr)
 {
   auto num_render_drivers = SDL_GetNumRenderDrivers ();
-  printf ("%d render drivers:\n",
-          num_render_drivers) for (auto i = 0; i < num_render_drivers; ++i)
-  {
-    SDL_RendererInfo renderer_info;
-    SDL_GetRenderDriverInfo (i, &renderer_info);
-    printf ("%d ", i);
-    print_renderer_info (renderer_info);
-  }
+  printf ("%d render drivers:\n", num_render_drivers);
+  for (auto i = 0; i < num_render_drivers; ++i)
+    {
+      SDL_RendererInfo renderer_info;
+      SDL_GetRenderDriverInfo (i, &renderer_info);
+      printf ("%d ", i);
+      print_renderer_info (renderer_info);
+    }
   Uint32 renderer_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
   auto renderer_index = -1;
   m_sdl_renderer
