@@ -145,16 +145,17 @@ game::start_playing () -> void
 auto
 game::update_playing (const game_input &input) -> void
 {
-  auto temp_instance = m_active_tetromino;
   // horizontal movement
   if (input.m_move_left)
     {
+      auto temp_instance = m_active_tetromino;
       --temp_instance.m_pos.x;
       if (!is_overlap (temp_instance, m_board))
         m_active_tetromino.m_pos.x = temp_instance.m_pos.x;
     }
   if (input.m_move_right)
     {
+      auto temp_instance = m_active_tetromino;
       ++temp_instance.m_pos.x;
       if (!is_overlap (temp_instance, m_board))
         m_active_tetromino.m_pos.x = temp_instance.m_pos.x;
@@ -164,6 +165,7 @@ game::update_playing (const game_input &input) -> void
      tetromino) */
   if (input.m_rotate_clockwise)
     {
+      auto temp_instance = m_active_tetromino;
       if (temp_instance.m_rotation == 0)
         {
           temp_instance.m_rotation = 3;
@@ -200,6 +202,9 @@ game::update_playing (const game_input &input) -> void
   --m_frames_until_fall;
   if (m_frames_until_fall <= 0)
     {
+      m_frames_until_fall = initial_frames_fall_step;
+
+      auto temp_instance = m_active_tetromino;
       ++temp_instance.m_pos.y;
       if (is_overlap (temp_instance, m_board))
         {
@@ -207,10 +212,15 @@ game::update_playing (const game_input &input) -> void
           if (!generate_tetromino ())
             m_game_state = state::game_over;
         }
+      else
+        {
+          m_active_tetromino.m_pos.y = temp_instance.m_pos.y;
+        }
     }
 
   if (input.m_soft_drop)
     {
+      auto temp_instance = m_active_tetromino;
       ++temp_instance.m_pos.y;
       if (!is_overlap (temp_instance, m_board))
         {
@@ -220,6 +230,7 @@ game::update_playing (const game_input &input) -> void
 
   if (input.m_hard_drop)
     {
+      auto temp_instance = m_active_tetromino;
       while (!is_overlap (temp_instance, m_board))
         {
           ++temp_instance.m_pos.y;
@@ -375,7 +386,7 @@ game::generate_tetromino () -> bool
   std::mt19937 gen (rd ());
 
   std::uniform_int_distribution<> distrib (
-      0, static_cast<int> (tetromino_type::count));
+      0, static_cast<int> (tetromino_type::count) - 1);
 
   m_active_tetromino.m_tetromino_type
       = static_cast<tetromino_type> (distrib (gen));
