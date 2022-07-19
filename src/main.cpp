@@ -1,11 +1,20 @@
-/**
-This file contains the mail loop
-*/
+/** @file main.cpp
+ *  @brief toplevel entry point of the program
+ *
+ *  This contains the toplevel main fucntion of the program
+ */
 
 #include "app.hpp"
 #include <SDL2/SDL.h>
 #include <cstdio>
 
+/** @brief entry point of the program
+ *
+ *  Try to initialise application with provided width and height, and run the
+ *  application on successfull initialisation
+ *
+ *  @return 0 in case of successfull execution, any other number otherwise
+ */
 int
 main ()
 {
