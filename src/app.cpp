@@ -1,12 +1,24 @@
-#include "app.hpp"
+#include "em_app.hpp"
 #include "game.hpp"
 #include "renderer.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-
 #include <chrono>
 #include <cstdio>
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
+using namespace application;
+
+SDL_Window *g_window;
+renderer *g_renderer;
+game *g_game;
+
+static bool is_done = false;
+static auto start_time = std::chrono::high_resolution_clock::now ();
 
 // helpers
 static void
@@ -21,14 +33,10 @@ operator== (SDL_version &a, SDL_version &b)
   return (a.major == b.major) && (a.minor == b.minor) && (a.patch == b.patch);
 }
 
-// class app
-app::app () : m_window (nullptr), m_renderer (nullptr), m_game (nullptr) {}
-
-auto
-app::init (bool is_full_screen, unsigned int width, unsigned int height)
-    -> bool
+bool
+application::init_app (const unsigned int width, const unsigned int height)
 {
-  if (SDL_Init (SDL_INIT_EVERYTHING) != 0)
+  if (SDL_Init (SDL_INIT_VIDEO) != 0)
     {
       fprintf (stderr, "SDL failed to initialise: %s\n", SDL_GetError ());
       return false;
@@ -61,21 +69,12 @@ app::init (bool is_full_screen, unsigned int width, unsigned int height)
               display_mode.h, display_mode.refresh_rate);
     }
 
-  const char *title = "SDL Window";
-  if (is_full_screen)
-    {
-      m_window = SDL_CreateWindow (title, SDL_WINDOWPOS_UNDEFINED,
-                                   SDL_WINDOWPOS_UNDEFINED, 0, 0,
-                                   SDL_WINDOW_FULLSCREEN_DESKTOP);
-    }
-  else
-    {
-      m_window = SDL_CreateWindow (title, SDL_WINDOWPOS_UNDEFINED,
-                                   SDL_WINDOWPOS_UNDEFINED, width, height,
-                                   SDL_WINDOW_SHOWN);
-    }
+  const char *title = "Tetris";
+  g_window = SDL_CreateWindow (title, SDL_WINDOWPOS_UNDEFINED,
+                               SDL_WINDOWPOS_UNDEFINED, width, height,
+                               SDL_WINDOW_SHOWN);
 
-  if (!m_window)
+  if (!g_window)
     {
       printf ("Failed to create SDL window: %s\n", SDL_GetError ());
       return false;
@@ -98,11 +97,11 @@ app::init (bool is_full_screen, unsigned int width, unsigned int height)
 
   unsigned int logicalWidth = 1280;
   unsigned int logicalHeight = 720;
-  m_renderer = new renderer (*m_window, logicalWidth, logicalHeight);
+  g_renderer = new renderer (*g_window, logicalWidth, logicalHeight);
 
-  m_game = new game ();
+  g_game = new game ();
 
-  if (!m_game->init_game ())
+  if (!g_game->init_game ())
     {
       fprintf (stderr, "ERROR - Game failed to initialise\n");
       return false;
@@ -111,92 +110,113 @@ app::init (bool is_full_screen, unsigned int width, unsigned int height)
   return true;
 }
 
-auto
-app::shut_down () -> void
+static auto
+process_input (game_input &input)
 {
-  if (m_game)
+  // respond to events
+  SDL_Event event;
+  while (SDL_PollEvent (&event))
     {
-      m_game->shutdown ();
-      delete m_game;
-      m_game = nullptr;
-    }
-
-  delete m_renderer;
-  m_renderer = nullptr;
-
-  TTF_Quit ();
-  SDL_DestroyWindow (m_window);
-  SDL_Quit ();
-}
-
-auto
-app::run () -> void
-{
-  auto last_time = std::chrono::high_resolution_clock::now ();
-
-  bool is_done = false;
-  while (!is_done)
-    {
-      game_input input = {};
-
-      // respond to events
-      SDL_Event event;
-      while (SDL_PollEvent (&event))
+      if (event.type == SDL_QUIT)
         {
-          if (event.type == SDL_QUIT)
-            {
-              is_done = true;
-            }
-
-          // quit if escape pressed
-          if (event.type == SDL_KEYDOWN)
-            {
-              switch (event.key.keysym.sym)
-                {
-                case SDLK_ESCAPE:
-                  is_done = true;
-                  break;
-                case SDLK_SPACE:
-                  input.m_start = true;
-                  break;
-                case SDLK_LEFT:
-                  input.m_move_left = true;
-                  break;
-                case SDLK_RIGHT:
-                  input.m_move_right = true;
-                  break;
-                case SDLK_z:
-                  input.m_rotate_clockwise = true;
-                  break;
-                case SDLK_x:
-                  input.m_rotate_anticlockwise = true;
-                  break;
-                case SDLK_UP:
-                  input.m_hard_drop = true;
-                  break;
-                case SDLK_DOWN:
-                  input.m_soft_drop = true;
-                  break;
-                case SDLK_p:
-                  input.m_pause = true;
-                  break;
-                }
-            }
+          is_done = true;
         }
 
-      auto current_time
-          = std::chrono::high_resolution_clock::now (); // high-precision time
-      auto delta_time = current_time - last_time;
-      auto delta_time_microsec
-          = std::chrono::duration_cast<std::chrono::microseconds> (delta_time);
-      auto delta_time_seconds
-          = 0.000001f * static_cast<float> (delta_time_microsec.count ());
-      last_time = current_time;
-
-      m_game->update (input, delta_time_seconds);
-
-      m_renderer->clear ();
-      m_game->draw (*m_renderer);
-      m_renderer->present ();
+      // quit if escape pressed
+      if (event.type == SDL_KEYDOWN)
+        {
+          switch (event.key.keysym.sym)
+            {
+            case SDLK_ESCAPE:
+            case SDLK_q:
+              is_done = true;
+              break;
+            case SDLK_SPACE:
+              input.m_start = true;
+              break;
+            case SDLK_LEFT:
+              input.m_move_left = true;
+              break;
+            case SDLK_RIGHT:
+              input.m_move_right = true;
+              break;
+            case SDLK_z:
+              input.m_rotate_clockwise = true;
+              break;
+            case SDLK_x:
+              input.m_rotate_anticlockwise = true;
+              break;
+            case SDLK_UP:
+              input.m_hard_drop = true;
+              break;
+            case SDLK_DOWN:
+              input.m_soft_drop = true;
+              break;
+            case SDLK_p:
+              input.m_pause = true;
+              break;
+            }
+        }
     }
+}
+
+static void
+event_loop_handler ()
+{
+
+#ifdef __EMSCRIPTEN__
+  if (is_done)
+    emscripten_cancel_main_loop ();
+#endif
+
+  game_input input = {};
+  process_input (input);
+
+  auto current_time = std::chrono::high_resolution_clock::now ();
+  auto delta_time = current_time - start_time;
+  auto delta_time_microsec
+      = std::chrono::duration_cast<std::chrono::microseconds> (delta_time);
+  auto delta_time_seconds
+      = 0.000001f * static_cast<float> (delta_time_microsec.count ());
+  start_time = current_time;
+
+  g_game->update (input, delta_time_seconds);
+
+  g_renderer->clear ();
+  g_game->draw (*g_renderer);
+  g_renderer->present ();
+}
+
+void
+application::run_app ()
+{
+  start_time = std::chrono::high_resolution_clock::now ();
+  is_done = false;
+
+#ifdef __EMSCRIPTEN__
+  emscripten_set_main_loop (event_loop_handler, -1, 0);
+#else
+  while (!is_done)
+    {
+      event_loop_handler ();
+    }
+#endif
+}
+
+void
+application::shut_down_app ()
+{
+  if (g_game)
+    {
+      g_game->shutdown ();
+      delete g_game;
+      g_game = nullptr;
+    }
+
+  delete g_renderer;
+  g_renderer = nullptr;
+
+  TTF_Quit ();
+  SDL_DestroyWindow (g_window);
+  SDL_Quit ();
 }

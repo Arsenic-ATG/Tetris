@@ -1,27 +1,13 @@
-#ifndef APP_H
-#define APP_H
+#ifndef EM_APP_H
+#define EM_APP_H
 
-// SDL forward
-struct SDL_Window;
-
-class game;
-class renderer;
-
-class app
+namespace application
 {
-public:
-  app ();
 
-  auto init (bool is_full_screen, unsigned int width, unsigned int height)
-      -> bool;
-  auto shut_down () -> void;
-  auto run () -> void;
+bool init_app (const unsigned int width, const unsigned int height);
+void run_app ();
+void shut_down_app ();
 
-private:
+}
 
-  SDL_Window *m_window;
-  renderer *m_renderer;
-  game *m_game;
-};
-
-#endif /* APP_H */
+#endif /* EM_APP_H */
