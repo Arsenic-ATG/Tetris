@@ -78,7 +78,7 @@ renderer::renderer (SDL_Window &window, unsigned int width,
   const auto display_aspect
       = static_cast<double> (display_width) / display_height;
   const auto aspect = static_cast<double> (width) / height;
-  if (display_aspect != display_aspect)
+  if (display_aspect != aspect)
     {
       printf (
           "logical aspect != display aspect. Letterboxing will be applied\n");
@@ -90,7 +90,7 @@ renderer::renderer (SDL_Window &window, unsigned int width,
                "linear"); // make the scaled rendering look smoother
 
   int default_font_size = 32;
-  m_font = TTF_OpenFont ("clacon.ttf", default_font_size);
+  m_font = TTF_OpenFont ("assets/clacon.ttf", default_font_size);
   if (!m_font)
     {
       fprintf (stderr, "TTF_OpenFont failed: %s\n", TTF_GetError ());

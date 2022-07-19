@@ -1,8 +1,6 @@
 #ifndef APP_H
 #define APP_H
 
-#include <memory>
-
 // SDL forward
 struct SDL_Window;
 

@@ -132,9 +132,7 @@ app::shut_down () -> void
 auto
 app::run () -> void
 {
-  Uint32 last_time_ms = SDL_GetTicks (); // only ms accuracy
-  auto last_time
-      = std::chrono::high_resolution_clock::now (); // high-precision time
+  auto last_time = std::chrono::high_resolution_clock::now ();
 
   bool is_done = false;
   while (!is_done)
@@ -186,20 +184,16 @@ app::run () -> void
             }
         }
 
-      Uint32 current_time_ms = SDL_GetTicks ();
-      // Uint32 delta_time_ms = current_time_ms - last_time_ms;
-      last_time_ms = current_time_ms;
-
-      auto currentTime
+      auto current_time
           = std::chrono::high_resolution_clock::now (); // high-precision time
-      auto deltaTime = currentTime - last_time;
-      std::chrono::microseconds delta_time_microsec
-          = std::chrono::duration_cast<std::chrono::microseconds> (deltaTime);
-      auto deltaTimeSeconds
+      auto delta_time = current_time - last_time;
+      auto delta_time_microsec
+          = std::chrono::duration_cast<std::chrono::microseconds> (delta_time);
+      auto delta_time_seconds
           = 0.000001f * static_cast<float> (delta_time_microsec.count ());
-      last_time = currentTime;
+      last_time = current_time;
 
-      m_game->update (input, deltaTimeSeconds);
+      m_game->update (input, delta_time_seconds);
 
       m_renderer->clear ();
       m_game->draw (*m_renderer);
