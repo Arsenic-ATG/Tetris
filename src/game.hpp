@@ -1,3 +1,9 @@
+/**@file game.hpp
+ * @brief contains function prototypes for game
+ *
+ * This contains function prototypes responsible for the game logic.
+ */
+
 #ifndef GAME_H
 #define GAME_H
 

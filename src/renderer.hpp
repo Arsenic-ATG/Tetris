@@ -1,3 +1,11 @@
+/**@file renderer.hpp
+ * @brief contains function prototypes for renderer
+ *
+ * This contains function prototypes for the renderer driver, which is
+ * responsibe for drawing stuff on screen.
+ *
+ */
+
 #ifndef RENDERER_H
 #define RENDERER_H
 
@@ -10,6 +18,10 @@ class Texture;
 struct SDL_Window;
 struct SDL_Renderer;
 
+/**@class renderer
+ * @brief wrapper around SDL renderer tailerd for this application.
+ *
+ */
 class renderer
 {
 public:

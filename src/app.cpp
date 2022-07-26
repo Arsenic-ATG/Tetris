@@ -1,3 +1,11 @@
+/** @file app.hpp
+ *  @brief function prototypes for application driver
+ *
+ *  This contains the prototypes for the application driver which is resposible
+ *  for initialising, running and shutting down the main application.
+ *
+ */
+
 #include "app.hpp"
 #include "game.hpp"
 #include "renderer.hpp"
@@ -17,10 +25,19 @@ SDL_Window *g_window;
 renderer *g_renderer;
 game *g_game;
 
-static bool is_done = false;
-static auto start_time = std::chrono::high_resolution_clock::now ();
+static bool is_done = false; /**< used to break the main event loop*/
 
-// helpers
+static auto start_time
+    = std::chrono::high_resolution_clock::now (); /**< used to calculate fps
+                                                     and calculate time for new
+                                                     frame to be rendererd */
+
+/** @brief Print SDL version info on stdout
+ *
+ *  @param Info that is to be printed before version info
+ *  @param object of type SDL_version, containg version info
+ *  @return Void
+ */
 static void
 print_SDL_version (const char *preamble, const SDL_version &v)
 {
@@ -33,6 +50,15 @@ operator== (SDL_version &a, SDL_version &b)
   return (a.major == b.major) && (a.minor == b.minor) && (a.patch == b.patch);
 }
 
+/** @brief check and initialise application
+ *
+ *  Initialise application by checking and initialising sdl, sdl windows, sdl
+ *  renderer and sdl_ttf
+ *
+ *  @param width of the logical screen
+ *  @param height of the logical screen
+ *  @return true if the app was initialized properly, false otherwise
+ */
 bool
 application::init_app (const unsigned int width, const unsigned int height)
 {
@@ -110,10 +136,30 @@ application::init_app (const unsigned int width, const unsigned int height)
   return true;
 }
 
-static auto
+/** @brief process the keypress of the user
+ *
+ *  process and translate the keypresses by the user to corresponding input to
+ *  the game
+ *
+ *  current inputs are as follows:
+ *
+ *  esc/q        -> exit game
+ *  space        -> start game
+ *  left_arrow   -> move left
+ *  right_arrow  -> move right
+ *  z            -> rotate clockwise
+ *  x            -> rotate counter clockwise
+ *  up_arrow     -> hard drop
+ *  down_arrow   -> soft drop
+ *  p            -> pause game
+ *
+ *  @param reference of game input object that needs to be updated with
+ *  processed info
+ *  @return Void
+ */
+static void
 process_input (game_input &input)
 {
-  // respond to events
   SDL_Event event;
   while (SDL_PollEvent (&event))
     {
@@ -160,12 +206,21 @@ process_input (game_input &input)
     }
 }
 
+/** @brief handle the main event loop of the entire application
+ *
+ *  This function would either be ran in an infilite loop (until is_done is
+ *  false) or would be passed to emscripten_set_main_loop () to run emulate
+ *  main event loop on web-browser
+ *
+ *  @return Void
+ */
 static void
 event_loop_handler ()
 {
 
 #ifdef __EMSCRIPTEN__
   if (is_done)
+     // TODO: shut down app here
     emscripten_cancel_main_loop ();
 #endif
 
@@ -187,6 +242,21 @@ event_loop_handler ()
   g_renderer->present ();
 }
 
+/** @brief Run the application main loop
+ *
+ *  Initialize the start time and start the main event loop of the application
+ *  which is an infinite loop in case of native build, emscripten main loop in
+ *  case of emscripten build.
+ *
+ *  we can't use infinite loop on web-brower as control never returns to
+ *  browser while the app renderes and app appears to be hanged causing the
+ *  browser to notify the user and eliminte the program.
+ *
+ *  check the following link for more info to why this is the case:
+ *  https://emscripten.org/docs/porting/emscripten-runtime-environment.html#browser-main-loop
+ *
+ *  @return Void
+ */
 void
 application::run_app ()
 {
