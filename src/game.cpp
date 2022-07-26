@@ -1,3 +1,8 @@
+/**@file game.cpp
+ * @brief containst function that implements the game logic.
+ *
+ */
+
 #include "game.hpp"
 #include "renderer.hpp"
 #include <random>
@@ -82,6 +87,16 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
       };
 
 // helpers
+
+/**@brief check for colisions on the board
+ *
+ * check if the given isntanc of tetormino would collide with the board or not.
+ *
+ * @param Tetromino instance whose colisions need to be checked.
+ * @param Instanc of board against which the collisions need to be checked.
+ * @return true if the given tetromino would collide with the board, false
+ * otherwise.
+ */
 static auto
 is_overlap (const tetromino_instance &p_instance, const board &p_board)
 {
@@ -105,6 +120,14 @@ is_overlap (const tetromino_instance &p_instance, const board &p_board)
   return false;
 }
 
+/**@brief Set the block on the board
+ *
+ * Change the value of static blocks on the board.
+ * @param instace of board on whose static blocks need to changed.
+ * @param coordinates on board which needs to be set/unset.
+ * @param value with which the staic block need to be filled.
+ * @return void
+ */
 static auto
 set_block (board &p_board, const coords i, const unsigned int val)
 {
@@ -112,18 +135,27 @@ set_block (board &p_board, const coords i, const unsigned int val)
   p_board.static_blocks[i.x * p_board.width + i.y] = val;
 }
 
+/**@brief Default Constructor of game class
+ */
 game::game ()
     : m_frames_until_fall (initial_frames_fall_step),
       m_game_state (game::state::title_screen)
 {
 }
 
+/**@brief Initialise the game
+ * The function is under costruction.
+ */
 auto
 game::init_game () const -> bool
 {
   return true;
 }
 
+/**@brief get the playing field ready
+ *
+ * Clear and set up the playing board for playing a new game.
+ */
 auto
 game::start_playing () -> void
 {
@@ -142,6 +174,15 @@ game::start_playing () -> void
   m_frames_per_fall_step = initial_frames_fall_step;
 }
 
+/**@brief Update the playing field responding to given input
+ *
+ * Contains tetromino movement and rotation mechanics and update the playing
+ * board with their effects. The rotation of tetrominos follow Tetris's
+ * standard super rotation system.
+ *
+ * @param input given to the game
+ * @return void
+ */
 auto
 game::update_playing (const game_input &input) -> void
 {
@@ -162,7 +203,7 @@ game::update_playing (const game_input &input) -> void
     }
 
   /* rotation floowing tetris SRS (// FIXME: check for special case of *I*
-     tetromino) */
+   * block where SRS can kick 2 blocks instea of one)*/
   if (input.m_rotate_clockwise)
     {
       auto temp_instance = m_active_tetromino;
@@ -242,6 +283,15 @@ game::update_playing (const game_input &input) -> void
     }
 }
 
+/**@brief Draw the playing field
+ *
+ * Draw the latest state of the board and falling tetromino using the provided
+ * renderer, the function only tells "What to render" on the screen, "how to
+ * render that" is handeled by renderer class.
+ *
+ * @param renderer object which is used to render stuff
+ * @return void
+ */
 auto
 game::draw_playing (renderer &p_renderer) -> void
 {
@@ -317,6 +367,15 @@ game::shutdown () -> void
 {
 }
 
+/**@brief Update the overall state of the game.
+ *
+ * The function updates the info of the game object depending on the current
+ * state of the game.
+ *
+ * @param input given to the game.
+ * @param time since the last udate.
+ * @return void
+ */
 auto
 game::update (const game_input &input, float delta_time_seconds) -> void
 {
@@ -348,6 +407,13 @@ game::update (const game_input &input, float delta_time_seconds) -> void
     }
 }
 
+/**@brief draw the current screen depending on the game status
+ *
+ * As "title screen" and "game over" screens are simply text on screen,their
+ * drawing logic is not implemented seperately as a different procedure.
+ * @param renderer used to render stuff on screen.
+ * @return void
+ */
 auto
 game::draw (renderer &p_renderer) -> void
 {
@@ -379,6 +445,12 @@ game::draw (renderer &p_renderer) -> void
   // TODO: write fps info on screen
 }
 
+/**@brief Genrate a tetromino instance with random type and configuration.
+ *
+ * Use a pseudo random number generator to generate a tetromino with random
+ * configuration and check if it is possible to bring it on board or not.
+ * @return true if the tetromino can be generated. false otherwise.
+ */
 auto
 game::generate_tetromino () -> bool
 {
@@ -401,10 +473,18 @@ game::generate_tetromino () -> bool
   return true;
 }
 
+/**@brief Bring the given tetromino instance on board.
+ *
+ * bring the tetromino to the board. The function also clears lines if the
+ * tetromino completes a row.
+ *
+ * @param instance of the board on which the tetromino needss to be brought.
+ * @param instance of the tetromino which needs to be brought on the boartd.
+ * @return void
+ */
 auto
 game::summon_tetromino_to_board (
-   board &p_board,const tetromino_instance &p_tetromino_instance)
-    -> void
+    board &p_board, const tetromino_instance &p_tetromino_instance) -> void
 {
   const auto &tet = tetromino_data[static_cast<int> (
       p_tetromino_instance.m_tetromino_type)];

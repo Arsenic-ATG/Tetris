@@ -1,3 +1,10 @@
+/** @file renderer.cpp
+ *  @brief contains implementaion of game renderer
+ *
+ *  Curently we are using SDL2 to render stuff on screen
+ *
+ */
+
 #include "renderer.hpp"
 /*TODO: location of SDL.h might change depending on the operating system.
 handle that here.  */
@@ -7,6 +14,11 @@ handle that here.  */
 
 // helper functions
 
+/**@brief make SDL_Color from rgb values of given color
+ *
+ * @param rgb value of color as 32 bit unsigned integer
+ * @return SDL_Color representing the provided color
+ */
 static auto
 make_sdl_color (uint32_t rgb_color)
 {
@@ -18,6 +30,13 @@ make_sdl_color (uint32_t rgb_color)
   return color;
 }
 
+/**@brief Print SDL renderer info on stdout
+ *
+ * function simly reads renderer info from provided object of type
+ * SDL_rendererInfo and prints it to stdout.
+ * @param SDL_RendererInfo type object containing renderer's info
+ * @return void
+ */
 static auto
 print_renderer_info (SDL_RendererInfo &rendererInfo)
 {
@@ -31,6 +50,12 @@ print_renderer_info (SDL_RendererInfo &rendererInfo)
 
 // class renderer
 
+/**@brief Constructor of renderer class
+ *
+ * @param object of type SDL_Window on which rendering need to take palce
+ * @param logical width of window
+ * @param logical height of window
+ */
 renderer::renderer (SDL_Window &window, unsigned int width,
                     unsigned int height)
     : m_width (width), m_height (height), m_sdl_renderer (nullptr),
@@ -99,12 +124,18 @@ renderer::renderer (SDL_Window &window, unsigned int width,
     }
 }
 
+/**@brief Destructor of renderer class
+ */
 renderer::~renderer ()
 {
   TTF_CloseFont (m_font);
   SDL_DestroyRenderer (m_sdl_renderer);
 }
 
+/**@brief Clear the rendering surface
+ *
+ * Paints the entire window with black color.
+ */
 auto
 renderer::clear () -> void
 {
@@ -112,12 +143,25 @@ renderer::clear () -> void
   SDL_RenderClear (m_sdl_renderer);
 }
 
+/**@brief Update the screen with rendering info
+ */
 auto
 renderer::present () -> void
 {
   SDL_RenderPresent (m_sdl_renderer);
 }
 
+/**@brief create an empty rectangle on the screen.
+ *
+ * Draw an empty rentange with the given dimentions on the given location the
+ * window.
+ *
+ * @param location of the rectangle
+ * @param width of the rectangle
+ * @param height of the rectangle
+ * @param color of the rectangle (rgb)
+ * @return void
+ */
 auto
 renderer::draw_rectangle (const coords loc, const int width, const int height,
                           const uint32_t rgb_color) -> void
@@ -128,6 +172,17 @@ renderer::draw_rectangle (const coords loc, const int width, const int height,
   SDL_RenderDrawRect (m_sdl_renderer, &rect);
 }
 
+/**@brief create an filled rectangle on the screen.
+ *
+ * Draw an filled rentange with the given dimentions on the given location the
+ * window.
+ *
+ * @param location of the rectangle
+ * @param width of the rectangle
+ * @param height of the rectangle
+ * @param color of the rectangle (rgb)
+ * @return void
+ */
 auto
 renderer::draw_filled_rectangle (const coords loc, const int width,
                                  const int height, const uint32_t rgb_color)
@@ -140,6 +195,15 @@ renderer::draw_filled_rectangle (const coords loc, const int width,
   SDL_RenderFillRect (m_sdl_renderer, &rect);
 }
 
+/**@brief Draw text on screen
+ *
+ * works for C++ style strings (std::string class)
+ *
+ * @param string (std::string) contining the text that needs to be rendered.
+ * @param location on the screen where text need to be presented.
+ * @param color of the text (rgb)
+ * @return void
+ */
 auto
 renderer::draw_text (const std::string &text, const coords loc,
                      const uint32_t rgb_color) -> void
@@ -147,6 +211,15 @@ renderer::draw_text (const std::string &text, const coords loc,
   draw_text (text.c_str (), loc, rgb_color);
 }
 
+/**@brief Draw text on scren
+ *
+ * Works for C-Style strings
+ *
+ * @param string (const char*) contining the text that needs to be rendered.
+ * @param location on the screen where text need to be presented.
+ * @param color of the text (rgb)
+ * @return void
+ */
 auto
 renderer::draw_text (const char *text, const coords loc,
                      const uint32_t rgb_color) -> void
