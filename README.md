@@ -36,4 +36,7 @@ Also feel free to open an issue for asking querries.
 
 ## License
 
-🚧 work in progress 🚧
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
+
+- **[MIT license](./LICENSE)**
+- Copyright 2022 © <a href="https://github.com/Arsenic-ATG" target="_blank">Ankur Saini</a>.
