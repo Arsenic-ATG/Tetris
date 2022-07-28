@@ -44,13 +44,13 @@ public:
   }
 
   auto draw_rectangle (const coords loc, const int width, const int height,
-                       const uint32_t rgb_color) -> void;
+                       const uint32_t rgba_color) -> void;
   auto draw_filled_rectangle (const coords loc, const int width,
-                              const int height, const uint32_t rgb_color)
+                              const int height, const uint32_t rgba_color)
       -> void;
   auto draw_text (const std::string &text, const coords loc,
-                  const uint32_t rgb_color) -> void;
-  auto draw_text (const char *text, const coords loc, const uint32_t rgb_color)
+                  const uint32_t rgba_color) -> void;
+  auto draw_text (const char *text, const coords loc, const uint32_t rgba_color)
       -> void;
 
 private:

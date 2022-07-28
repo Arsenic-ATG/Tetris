@@ -42,7 +42,7 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
                 { { 0, 1 }, { 1, 1 }, { 2, 1 }, { 0, 2 } },
                 { { 0, 0 }, { 1, 0 }, { 1, 1 }, { 1, 2 } },
             },
-            0xffaa00ff,
+            0xff7f00ff,
         },
         // O
         {
@@ -72,7 +72,7 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
                 { { 0, 1 }, { 1, 1 }, { 2, 1 }, { 1, 2 } },
                 { { 1, 0 }, { 0, 1 }, { 1, 1 }, { 1, 2 } },
             },
-            0x9900ffff,
+            0x800080ff,
         },
         // Z
         {
@@ -320,14 +320,14 @@ game::draw_playing (renderer &p_renderer) -> void
           const auto x = board_offset_in_pixels.x + j * block_size_in_pixels;
           const auto block_state
               = m_board.static_blocks[i * m_board.width + j];
-          auto block_rgb_color = 0x202020ff;
+          auto block_rgba_color = 0x333333ff;
           if (block_state != -1)
             {
-              block_rgb_color = tetromino_data[block_state].color;
+              block_rgba_color = tetromino_data[block_state].color;
             }
           p_renderer.draw_filled_rectangle (
               coords (x, y), block_size_in_pixels, block_size_in_pixels,
-              block_rgb_color);
+              block_rgba_color);
           p_renderer.draw_rectangle (coords (x, y), block_size_in_pixels,
                                      block_size_in_pixels, 0x404040ff);
         }
@@ -340,7 +340,7 @@ game::draw_playing (renderer &p_renderer) -> void
           m_active_tetromino.m_tetromino_type)];
       const auto &block_coords
           = tet.block_coords[m_active_tetromino.m_rotation];
-      auto tetromino_color_rgb = tet.color;
+      auto tetromino_color_rgba = tet.color;
       const auto x = board_offset_in_pixels.x
                      + (m_active_tetromino.m_pos.x + block_coords[i].x)
                            * block_size_in_pixels;
@@ -349,7 +349,7 @@ game::draw_playing (renderer &p_renderer) -> void
                            * block_size_in_pixels;
       p_renderer.draw_filled_rectangle (coords (x, y), block_size_in_pixels,
                                         block_size_in_pixels,
-                                        tetromino_color_rgb);
+                                        tetromino_color_rgba);
     }
 
   // TODO: print score on screen.

@@ -20,13 +20,13 @@ handle that here.  */
  * @return SDL_Color representing the provided color
  */
 static auto
-make_sdl_color (uint32_t rgb_color)
+make_sdl_color (uint32_t rgba_color)
 {
   SDL_Color color;
-  color.r = (unsigned char)((rgb_color >> 24) & 0xff);
-  color.g = (unsigned char)((rgb_color >> 16) & 0xff);
-  color.b = (unsigned char)((rgb_color >> 8) & 0xff);
-  color.a = (unsigned char)((rgb_color >> 0) & 0xff);
+  color.r = (unsigned char)((rgba_color >> 24) & 0xff);
+  color.g = (unsigned char)((rgba_color >> 16) & 0xff);
+  color.b = (unsigned char)((rgba_color >> 8) & 0xff);
+  color.a = (unsigned char)((rgba_color >> 0) & 0xff);
   return color;
 }
 
@@ -164,9 +164,9 @@ renderer::present () -> void
  */
 auto
 renderer::draw_rectangle (const coords loc, const int width, const int height,
-                          const uint32_t rgb_color) -> void
+                          const uint32_t rgba_color) -> void
 {
-  auto color = make_sdl_color (rgb_color);
+  auto color = make_sdl_color (rgba_color);
   SDL_SetRenderDrawColor (m_sdl_renderer, color.r, color.g, color.b, color.a);
   SDL_Rect rect = { loc.x, loc.y, width, height };
   SDL_RenderDrawRect (m_sdl_renderer, &rect);
@@ -185,10 +185,10 @@ renderer::draw_rectangle (const coords loc, const int width, const int height,
  */
 auto
 renderer::draw_filled_rectangle (const coords loc, const int width,
-                                 const int height, const uint32_t rgb_color)
+                                 const int height, const uint32_t rgba_color)
     -> void
 {
-  auto color = make_sdl_color (rgb_color);
+  auto color = make_sdl_color (rgba_color);
   SDL_SetRenderDrawColor (m_sdl_renderer, color.r, color.g, color.b, color.a);
 
   SDL_Rect rect = { loc.x, loc.y, width, height };
@@ -206,9 +206,9 @@ renderer::draw_filled_rectangle (const coords loc, const int width,
  */
 auto
 renderer::draw_text (const std::string &text, const coords loc,
-                     const uint32_t rgb_color) -> void
+                     const uint32_t rgba_color) -> void
 {
-  draw_text (text.c_str (), loc, rgb_color);
+  draw_text (text.c_str (), loc, rgba_color);
 }
 
 /**@brief Draw text on scren
@@ -222,11 +222,11 @@ renderer::draw_text (const std::string &text, const coords loc,
  */
 auto
 renderer::draw_text (const char *text, const coords loc,
-                     const uint32_t rgb_color) -> void
+                     const uint32_t rgba_color) -> void
 {
   SDL_assert (text);
 
-  SDL_Color color = make_sdl_color (rgb_color);
+  SDL_Color color = make_sdl_color (rgba_color);
 
   SDL_Surface *sdl_surface = TTF_RenderText_Blended (m_font, text, color);
   SDL_Texture *texture
