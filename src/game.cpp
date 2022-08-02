@@ -139,7 +139,7 @@ set_block (board &p_board, const coords i, const unsigned int val)
  */
 game::game ()
     : m_frames_until_fall (initial_frames_fall_step),
-      m_game_state (game::state::title_screen)
+      m_game_state (game::state::title_screen), m_score (0)
 {
 }
 
@@ -161,6 +161,7 @@ game::start_playing () -> void
 {
   m_board.width = board_width;
   m_board.height = board_height;
+  m_score = 0;
   m_board.static_blocks = std::vector<int> (m_board.width * m_board.height);
 
   for (auto i = 0u; i < m_board.height; ++i)
@@ -341,18 +342,22 @@ game::draw_playing (renderer &p_renderer) -> void
       const auto &block_coords
           = tet.block_coords[m_active_tetromino.m_rotation];
       auto tetromino_color_rgba = tet.color;
+
       const auto x = board_offset_in_pixels.x
                      + (m_active_tetromino.m_pos.x + block_coords[i].x)
                            * block_size_in_pixels;
       const auto y = board_offset_in_pixels.y
                      + (m_active_tetromino.m_pos.y + block_coords[i].y)
                            * block_size_in_pixels;
+
       p_renderer.draw_filled_rectangle (coords (x, y), block_size_in_pixels,
                                         block_size_in_pixels,
                                         tetromino_color_rgba);
     }
 
-  // TODO: print score on screen.
+  //print score
+  p_renderer.draw_text ("Score :", {100,100},0xffffffff);
+  p_renderer.draw_text (std::to_string(m_score), {100,130},0xffffffff);
 }
 
 // TODO: function yet to implement
@@ -514,6 +519,8 @@ game::summon_tetromino_to_board (
         }
       if (current_row_filled)
         {
+          // 100 score per line clear
+          m_score += 100;
           for (auto i = y; i > 0; --i)
             {
               for (auto j = 0u; j < p_board.width; ++j)
@@ -524,6 +531,4 @@ game::summon_tetromino_to_board (
             }
         }
     }
-
-  // TODO: perform any score calculation here;
 }
