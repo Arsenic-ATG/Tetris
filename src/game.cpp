@@ -359,6 +359,33 @@ game::draw_playing (renderer &p_renderer) -> void
                                         tetromino_color_rgba);
     }
 
+  // ghost block (represents location of current block if it were to be hard
+  // dropped)
+  for (auto i = 0u; i < 4; ++i)
+    {
+      auto ghost_block = m_active_tetromino;
+      while (!is_overlap (ghost_block, m_board))
+        {
+          ++ghost_block.m_pos.y;
+        }
+      --ghost_block.m_pos.y;
+
+      const auto &tet
+          = tetromino_data[static_cast<int> (ghost_block.m_tetromino_type)];
+      const auto &block_coords = tet.block_coords[ghost_block.m_rotation];
+      auto tetromino_color_rgba = tet.color;
+
+      const auto x
+          = board_offset_in_pixels.x
+            + (ghost_block.m_pos.x + block_coords[i].x) * block_size_in_pixels;
+      const auto y
+          = board_offset_in_pixels.y
+            + (ghost_block.m_pos.y + block_coords[i].y) * block_size_in_pixels;
+
+      p_renderer.draw_rectangle (coords (x, y), block_size_in_pixels,
+                                 block_size_in_pixels, tetromino_color_rgba);
+    }
+
   // print score
   p_renderer.draw_text ("Score :", { 100, 100 }, 0xffffffff);
   p_renderer.draw_text (std::to_string (m_score), { 100, 130 }, 0xffffffff);
