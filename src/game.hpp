@@ -81,7 +81,6 @@ private:
   auto generate_tetromino () -> bool;
   auto summon_tetromino_to_board (
       board &p_board, const tetromino_instance &p_tetromino_instance) -> void;
-  //  auto summon_tetromino_to_board () -> void;
 
   enum class state
   {
@@ -96,6 +95,7 @@ private:
   board m_board;
   state m_game_state;
   float m_delta_time_seconds;
+  long int m_score;
 };
 
 #endif /* GAME_H */
