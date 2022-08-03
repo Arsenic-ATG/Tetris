@@ -86,6 +86,7 @@ private:
   {
     title_screen,
     playing,
+    paused,
     game_over,
   };
 

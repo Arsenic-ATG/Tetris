@@ -187,6 +187,10 @@ game::start_playing () -> void
 auto
 game::update_playing (const game_input &input) -> void
 {
+  if (input.m_pause)
+    {
+      m_game_state = state::paused;
+    }
   // horizontal movement
   if (input.m_move_left)
     {
@@ -355,9 +359,9 @@ game::draw_playing (renderer &p_renderer) -> void
                                         tetromino_color_rgba);
     }
 
-  //print score
-  p_renderer.draw_text ("Score :", {100,100},0xffffffff);
-  p_renderer.draw_text (std::to_string(m_score), {100,130},0xffffffff);
+  // print score
+  p_renderer.draw_text ("Score :", { 100, 100 }, 0xffffffff);
+  p_renderer.draw_text (std::to_string (m_score), { 100, 130 }, 0xffffffff);
 }
 
 // TODO: function yet to implement
@@ -401,6 +405,14 @@ game::update (const game_input &input, float delta_time_seconds) -> void
         update_playing (input);
       }
       break;
+    case state::paused:
+      {
+        if (input.m_pause)
+          {
+            m_game_state = state::playing;
+          }
+      }
+      break;
     case state::game_over:
       {
         if (input.m_start)
@@ -435,6 +447,15 @@ game::draw (renderer &p_renderer) -> void
     case state::playing:
       {
         draw_playing (p_renderer);
+      }
+      break;
+    case state::paused:
+      {
+        draw_playing (p_renderer);
+        p_renderer.draw_text ("Paused ",
+                              coords (p_renderer.get_width () / 2 - 40,
+                                      p_renderer.get_height () / 2),
+                              0xffffffff);
       }
       break;
     case state::game_over:

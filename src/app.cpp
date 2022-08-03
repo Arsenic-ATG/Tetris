@@ -220,8 +220,11 @@ event_loop_handler ()
 
 #ifdef __EMSCRIPTEN__
   if (is_done)
-     // TODO: shut down app here
-    emscripten_cancel_main_loop ();
+    {
+      emscripten_cancel_main_loop ();
+      shut_down_app ();
+    }
+
 #endif
 
   game_input input = {};
