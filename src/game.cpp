@@ -212,14 +212,9 @@ game::update_playing (const game_input &input) -> void
   if (input.m_rotate_clockwise)
     {
       auto temp_instance = m_active_tetromino;
-      if (temp_instance.m_rotation == 0)
-        {
-          temp_instance.m_rotation = 3;
-        }
-      else
-        {
-          --temp_instance.m_rotation;
-        }
+      temp_instance.m_rotation
+          = (temp_instance.m_rotation + tetromino::rotation_num - 1)
+            % tetromino::rotation_num;
       if (is_overlap (temp_instance, m_board))
         {
           temp_instance.m_pos.x = m_active_tetromino.m_pos.x - 1;
@@ -240,8 +235,25 @@ game::update_playing (const game_input &input) -> void
 
   if (input.m_rotate_anticlockwise)
     {
-      m_active_tetromino.m_rotation
-          = (m_active_tetromino.m_rotation + 1) % tetromino::rotation_num;
+      auto temp_instance = m_active_tetromino;
+      temp_instance.m_rotation
+          = (temp_instance.m_rotation + 1) % tetromino::rotation_num;
+      if (is_overlap (temp_instance, m_board))
+        {
+          temp_instance.m_pos.x = m_active_tetromino.m_pos.x - 1;
+          if (!is_overlap (temp_instance, m_board))
+            m_active_tetromino = temp_instance;
+          else
+            {
+              temp_instance.m_pos.x = m_active_tetromino.m_pos.x + 1;
+              if (!is_overlap (temp_instance, m_board))
+                m_active_tetromino = temp_instance;
+            }
+        }
+      else
+        {
+          m_active_tetromino = temp_instance;
+        }
     }
 
   // fall
