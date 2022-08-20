@@ -30,9 +30,9 @@ Tetris™ clone created in C++ and SDL, The project is also designed to be compi
 
 ## Contribution
 
-**The project is under development** , If you want to report a but, or want to share ideas/contribute to the project then feel free to open an issue/PR regarding the same
+**The project is under development** , If you want to report a bug, or want to share ideas/contribute to the project then feel free to open an issue/PR regarding the same
 
-Also feel free to open an issue for asking querries.
+Also feel free to open an issue for asking queries.
 
 ## License
 
