@@ -139,7 +139,8 @@ set_block (board &p_board, const coords i, const unsigned int val)
  */
 game::game ()
     : m_frames_until_fall (initial_frames_fall_step),
-      m_game_state (game::state::title_screen), m_score (0)
+      m_game_state (game::state::title_screen), m_score (0),
+      m_lines_cleared (0)
 {
 }
 
@@ -162,6 +163,7 @@ game::start_playing () -> void
   m_board.width = board_width;
   m_board.height = board_height;
   m_score = 0;
+  m_lines_cleared = 0;
   m_board.static_blocks = std::vector<int> (m_board.width * m_board.height);
 
   for (auto i = 0u; i < m_board.height; ++i)
@@ -260,8 +262,7 @@ game::update_playing (const game_input &input) -> void
   --m_frames_until_fall;
   if (m_frames_until_fall <= 0)
     {
-      m_frames_until_fall = initial_frames_fall_step;
-
+      m_frames_until_fall = m_frames_per_fall_step;
       auto temp_instance = m_active_tetromino;
       ++temp_instance.m_pos.y;
       if (is_overlap (temp_instance, m_board))
@@ -398,7 +399,8 @@ game::draw_playing (renderer &p_renderer) -> void
                                  block_size_in_pixels, tetromino_color_rgba);
     }
 
-  // print score
+  // calculate and print score
+  m_score = 100 * m_lines_cleared;
   p_renderer.draw_text ("Score :", { 100, 100 }, 0xffffffff);
   p_renderer.draw_text (std::to_string (m_score), { 100, 130 }, 0xffffffff);
 }
@@ -579,8 +581,12 @@ game::summon_tetromino_to_board (
         }
       if (current_row_filled)
         {
-          // 100 score per line clear
-          m_score += 100;
+          ++m_lines_cleared;
+          // increase diffculty for every 5 line clears
+          constexpr int difficulty_step = 5;
+
+          if (m_lines_cleared && (m_lines_cleared % difficulty_step) == 0)
+            m_frames_per_fall_step = std::max (0, m_frames_per_fall_step - 10);
           for (auto i = y; i > 0; --i)
             {
               for (auto j = 0u; j < p_board.width; ++j)
