@@ -9,7 +9,7 @@
 
 static constexpr auto board_width = 10u;
 static constexpr auto board_height = 20u;
-static constexpr auto initial_frames_fall_step = 48u;
+static constexpr auto initial_frames_fall_step = 45u;
 
 // rotation data (uses SRS)
 static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
@@ -586,7 +586,7 @@ game::summon_tetromino_to_board (
           constexpr int difficulty_step = 5;
 
           if (m_lines_cleared && (m_lines_cleared % difficulty_step) == 0)
-            m_frames_per_fall_step = std::max (0, m_frames_per_fall_step - 10);
+            m_frames_per_fall_step = std::max (15, m_frames_per_fall_step - 5);
           for (auto i = y; i > 0; --i)
             {
               for (auto j = 0u; j < p_board.width; ++j)
