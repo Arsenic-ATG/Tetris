@@ -299,6 +299,11 @@ game::update_playing (const game_input &input) -> void
       if (!generate_tetromino ())
         m_game_state = state::game_over;
     }
+
+  if (input.m_reset)
+    {
+      reset();
+    }
 }
 
 /**@brief Draw the playing field
@@ -405,10 +410,19 @@ game::draw_playing (renderer &p_renderer) -> void
   p_renderer.draw_text (std::to_string (m_score), { 100, 130 }, 0xffffffff);
 }
 
-// TODO: function yet to implement
 auto
 game::reset () -> void
 {
+  for(size_t i = 0; i < m_board.height; i++)
+  {
+    for(size_t j = 0; j < m_board.width; j++)
+    {
+      m_board.static_blocks[i * m_board.width + j] = -1;
+    }
+  }
+
+  m_lines_cleared = 0;
+  m_score = 0;
 }
 
 // TODO: function yet to implement

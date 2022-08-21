@@ -59,6 +59,7 @@ struct game_input
   bool m_rotate_anticlockwise;
   bool m_hard_drop;
   bool m_soft_drop;
+  bool m_reset;
 };
 
 class game
