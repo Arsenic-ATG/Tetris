@@ -91,12 +91,16 @@ private:
   };
 
   int m_frames_until_fall;
-  int m_frames_per_fall_step; // doesn't do much as of now
+  int m_frames_per_fall_step; // control speed of the game
   tetromino_instance m_active_tetromino;
   board m_board;
   state m_game_state;
   float m_delta_time_seconds;
+
+  // used for calculating score
   long int m_score;
+  int m_lines_cleared;
+
 };
 
 #endif /* GAME_H */
