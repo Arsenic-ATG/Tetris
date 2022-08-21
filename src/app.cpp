@@ -201,6 +201,9 @@ process_input (game_input &input)
             case SDLK_p:
               input.m_pause = true;
               break;
+            case SDLK_r:
+              input.m_reset = true;
+              break;
             }
         }
     }
