@@ -15,6 +15,7 @@ Tetris™ clone created in C++ and SDL, The project is also designed to be compi
 |`up_arrow`   | hard drop               |
 |`down_arrow` | soft drop               |
 |`p`          | pause game              |
+|`r`          | reset game              |
 
 ## Dependencies
 
