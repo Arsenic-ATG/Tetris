@@ -493,7 +493,7 @@ game::draw (renderer &p_renderer) -> void
     {
     case state::title_screen:
       {
-        p_renderer.draw_text ("Press space to start",
+        p_renderer.draw_text ("Press enter to start",
                               coords (p_renderer.get_width () / 2 - 100,
                                       p_renderer.get_height () / 2),
                               0xffffffff);

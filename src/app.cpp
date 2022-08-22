@@ -144,12 +144,12 @@ application::init_app (const unsigned int width, const unsigned int height)
  *  current inputs are as follows:
  *
  *  esc/q        -> exit game
- *  space        -> start game
+ *  enter        -> start game
  *  left_arrow   -> move left
  *  right_arrow  -> move right
- *  z            -> rotate clockwise
- *  x            -> rotate counter clockwise
- *  up_arrow     -> hard drop
+ *  z/up_arrow   -> rotate clockwise
+ *  x/ctrl       -> rotate counter clockwise
+ *  space        -> hard drop
  *  down_arrow   -> soft drop
  *  p            -> pause game
  *
@@ -177,7 +177,7 @@ process_input (game_input &input)
             case SDLK_q:
               is_done = true;
               break;
-            case SDLK_SPACE:
+            case SDLK_RETURN:
               input.m_start = true;
               break;
             case SDLK_LEFT:
@@ -187,13 +187,12 @@ process_input (game_input &input)
               input.m_move_right = true;
               break;
             case SDLK_z:
+            case SDLK_UP:
               input.m_rotate_clockwise = true;
               break;
             case SDLK_x:
+            case SDLK_LCTRL:
               input.m_rotate_anticlockwise = true;
-              break;
-            case SDLK_UP:
-              input.m_hard_drop = true;
               break;
             case SDLK_DOWN:
               input.m_soft_drop = true;
@@ -203,6 +202,9 @@ process_input (game_input &input)
               break;
             case SDLK_r:
               input.m_reset = true;
+              break;
+            case SDLK_SPACE:
+              input.m_hard_drop = true;
               break;
             }
         }
