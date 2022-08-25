@@ -6,16 +6,16 @@ Tetris™ clone created in C++ and SDL, The project is also designed to be compi
 
 ## controls 
 
-|     key     |        Action           |
-|     ---     |        ------           |
-|`left_arrow` | move left               |
-|`right_arrow`| move right              |
-|`z`          | rotate clockwise        |
-|`x`          | rotate counter clockwise|
-|`up_arrow`   | hard drop               |
-|`down_arrow` | soft drop               |
-|`p`          | pause game              |
-|`r`          | reset game              |
+| key                | Action                   |
+|--------------------|--------------------------|
+| `left_arrow`       | move left                |
+| `right_arrow`      | move right               |
+| `z` or `up_arrow`  | rotate clockwise         |
+| `x` or `left-ctrl` | rotate counter clockwise |
+| `space`            | hard drop                |
+| `down_arrow`       | soft drop                |
+| `p`                | pause game               |
+| `r`                | reset game               |
 
 ## Dependencies
 
