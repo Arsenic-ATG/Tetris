@@ -4,7 +4,7 @@ Tetris™ clone created in C++ and SDL, The project is also designed to be compi
 | [Start a new game](https://tetrisplusplus.netlify.app/) |
 | --------------------------------------- |
 
-## controls 
+## controls
 
 | key                | Action                   |
 |--------------------|--------------------------|
@@ -26,8 +26,52 @@ Tetris™ clone created in C++ and SDL, The project is also designed to be compi
 - [SDL TTF library](https://github.com/libsdl-org/SDL_ttf) : for rendering font from TrueType (.ttf) font files.
 
 ## Build instructions
+( This section or README.md is still under construction, you may help in improving this by opening a PR/issue regarding the same )
 
-🚧 work in progress 🚧
+perform the following steps to build the project on your native machine :
+
+1. Clone/download the repository
+
+2. Navigate to `src` subdirectory of repository
+
+3. Now compile the program  (depending on wether you want to build the online deployable version or native build, follow one of the following steps )
+
+   **caveat:** currently the repository doesn't have a build system/script to automate the build process, so sadly for now, manual build is the only way to get the project running on the system (If you are interested in setting up one for the project then feel free to open an issue discussing the same)
+
+    3.1. **WebAsm build using emscripten** :
+
+
+    To build the online deployable version of the game, we would be using `emscripten` to compile the program to webasm.
+
+    - Executing the following command is I think all you need to compile the project ( do note that Emscripten tend to take relatively long time than your average C++ compiler to build the project, and compilling for the first time would almost always take much longer to build than subsequent builds )
+    ``` shell
+    $ em++ -std=c++17 renderer.cpp game.cpp app.cpp main.cpp -O2 -s TOTAL_MEMORY=67108864 -s USE_SDL=2 -s USE_SDL_TTF=2 --preload-file assets -o ../build/index.js
+    ```
+
+    TODO: explain what the above command does in detail
+
+    - The build files should be in [`build`](./build) subdirectory of the repository
+    - once in build directory, you can simply use `emrun` to run the built game locally on your web-browser
+
+    ``` shell
+    $ emrun
+    ```
+
+    you may also visit [emscripten documentation](https://emscripten.org/docs/compiling/Building-Projects.html#building-projects) regarding more info about building a project with emscripten if you are interesting to know more about the same.
+
+    3.2. **Native build using native C++ compiler** :
+
+    - Just use your native C++ compiler to build and executable from all the source files (order in which they should be provided to the command should not matter in most cases )
+
+    - Make sure to link `SDL2` and `SDL2_ttf` libraries properly.
+
+    ```shell
+     $ g++ -std=c++17 renderer.cpp game.cpp app.cpp main.cpp -O2 -lSDL2_ttf -lSDL2
+    ```
+
+    - run the built executable.
+
+These instructins are meant to be understood by developers of every level, so if you are unable to understand anything or face any difficulty in building the project then make sure to complaint about the same by opening an issue or in discuss section.
 
 ## Contribution
 
