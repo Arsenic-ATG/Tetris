@@ -51,13 +51,13 @@ perform the following steps to build the project on your native machine :
     TODO: explain what the above command does in detail
 
     - The build files should be in [`build`](./build) subdirectory of the repository
-    - once in build directory, you can simply use `emrun` to run the built game locally on your web-browser
+    - Once in build directory, you can simply use `emrun` to run the HTML pages via a locally launched web server.
 
     ``` shell
-    $ emrun
+    $ emrun index.html
     ```
 
-    you may also visit [emscripten documentation](https://emscripten.org/docs/compiling/Building-Projects.html#building-projects) regarding more info about building a project with emscripten if you are interesting to know more about the same.
+    FWIW: you may also like to visit [emscripten documentation](https://emscripten.org/docs/compiling/Building-Projects.html#building-projects) regarding more info about building a project with emscripten if you are interesting to know more about the same.
 
     3.2. **Native build using native C++ compiler** :
 
