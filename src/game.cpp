@@ -493,10 +493,20 @@ game::draw (renderer &p_renderer) -> void
     {
     case state::title_screen:
       {
-        p_renderer.draw_text ("Press enter to start",
-                              coords (p_renderer.get_width () / 2 - 100,
-                                      p_renderer.get_height () / 2),
-                              0xffffffff);
+        p_renderer.draw_text("Press enter to start",
+            coords(p_renderer.get_width() / 2 - 100,
+                p_renderer.get_height() / 2),
+            0xffffffff);
+
+        p_renderer.draw_text("CONTROLS:\n LEFT ARROW -- Move Left \n RIGHT ARROW -- Move Right \n Z or UP ARROW -- Rotate Clockwise \n X or LEFT-CTRL -- Rotate Counterclockwise ",
+            coords(p_renderer.get_width() / 2,
+                p_renderer.get_height() / 2 - 100),
+            0xffffffff);
+
+        p_renderer.draw_text("SPACE -- Hard Drop \n DOWN ARROW -- Soft Drop \n P -- Pause Game \n R  Reset Game",
+            coords(p_renderer.get_width() / 2,
+                p_renderer.get_height() / 2 - 120),
+            0xffffffff);
       }
       break;
     case state::playing:
