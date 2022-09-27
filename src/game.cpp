@@ -493,20 +493,52 @@ game::draw (renderer &p_renderer) -> void
     {
     case state::title_screen:
       {
-        p_renderer.draw_text("Press enter to start",
-            coords(p_renderer.get_width() / 2 - 100,
-                p_renderer.get_height() / 2),
-            0xffffffff);
+          coords center (p_renderer.get_width ()/2, p_renderer.get_height ()/2);
 
-        p_renderer.draw_text("CONTROLS:\n LEFT ARROW -- Move Left \n RIGHT ARROW -- Move Right \n Z or UP ARROW -- Rotate Clockwise \n X or LEFT-CTRL -- Rotate Counterclockwise ",
-            coords(p_renderer.get_width() / 2,
-                p_renderer.get_height() / 2 - 100),
-            0xffffffff);
+          p_renderer.draw_text("CONTROLS:",
+                               coords(center.x - 150,
+                                      center.y - 130),
+                               0xffffffff);
 
-        p_renderer.draw_text("SPACE -- Hard Drop \n DOWN ARROW -- Soft Drop \n P -- Pause Game \n R  Reset Game",
-            coords(p_renderer.get_width() / 2,
-                p_renderer.get_height() / 2 - 120),
-            0xffffffff);
+          p_renderer.draw_text("LEFT/RIGHT ARROW -- Move Left/Right",
+                               coords(center.x - 100,
+                                      center.y - 100),
+                               0xffffffff);
+
+          p_renderer.draw_text("Z or UP ARROW -- Rotate Clockwise",
+                               coords(center.x - 100,
+                                      center.y - 80),
+                               0xffffffff);
+
+          p_renderer.draw_text("X or LEFT-CTRL -- Rotate Counterclockwise ",
+                               coords(center.x - 100,
+                                      center.y - 60),
+                               0xffffffff);
+
+          p_renderer.draw_text("SPACE -- Hard Drop",
+                               coords(center.x - 100,
+                                      center.y - 40),
+                               0xffffffff);
+
+          p_renderer.draw_text("DOWN ARROW -- Soft Drop",
+                               coords(center.x - 100,
+                                      center.y - 20),
+                               0xffffffff);
+
+          p_renderer.draw_text("P -- Pause Game",
+                               coords(center.x - 100,
+                                      center.y),
+                               0xffffffff);
+
+          p_renderer.draw_text("R -- Reset Game",
+                               coords(center.x - 100,
+                                      center.y + 20),
+                               0xffffffff);
+
+          p_renderer.draw_text("Press enter to start",
+                               coords(center.x - 100,
+                                      center.y + 60),
+                               0xffffffff);
       }
       break;
     case state::playing:
