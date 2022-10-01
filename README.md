@@ -73,11 +73,21 @@ perform the following steps to build the project on your native machine :
 
 These instructins are meant to be understood by developers of every level, so if you are unable to understand anything or face any difficulty in building the project then make sure to complaint about the same by opening an issue or in discuss section.
 
+## For Hacktoberfest
+
+This repository is participating in hacktoberfest, so any contribution done on this project during the month of october should be counted towards hacktoberfest.
+
 ## Contribution
 
-**The project is under development** , If you want to report a bug, or want to share ideas/contribute to the project then feel free to open an issue/PR regarding the same
+Contribution of all kinds ( code, non-code, low-code) are appriciated. 
+
+- If you are looking to contribute to the project then make sure to read [contribution guidelines](./CONTRIBUTING.md) before making a new pull request.
+
+- If you want to report a bug, or want to share ideas/contribute to the project then feel free to open an issue/PR regarding the same
 
 Also feel free to open an issue for asking queries.
+
+**If you liked the project then make sure to support the developers by giving it a star 🤩.**
 
 ## License
 
