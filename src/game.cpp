@@ -408,6 +408,40 @@ game::draw_playing (renderer &p_renderer) -> void
   m_score = 100 * m_lines_cleared;
   p_renderer.draw_text ("Score :", { 100, 100 }, 0xffffffff);
   p_renderer.draw_text (std::to_string (m_score), { 100, 130 }, 0xffffffff);
+  p_renderer.draw_text ("Current Block:", { 100, 170 }, 0xffffffff);
+  // p_renderer.draw_text (std::to_string (static_cast<int> (
+  //   m_active_tetromino.m_tetromino_type)),
+  //                        { 100, 200 }, 0xffffffff);
+
+  // active tetromino
+  for (auto i = 0u; i < 4; ++i)
+    {
+      const auto &tet = tetromino_data[static_cast<int> (
+          m_active_tetromino.m_tetromino_type)];
+      const auto &block_coords
+          = tet.block_coords[m_active_tetromino.m_rotation];
+
+
+      auto tetromino_color_rgba = tet.color;
+
+      const auto mini_scale = 0.7;  // small preview block scale
+
+      const auto x = board_offset_in_pixels.x
+                    //  + (m_active_tetromino.m_pos.x + block_coords[i].x)
+                     + ( block_coords[i].x)
+                           * block_size_in_pixels*mini_scale;
+      const auto y = board_offset_in_pixels.y
+                    //  + (m_active_tetromino.m_pos.y + block_coords[i].y)
+                    + ( block_coords[i].y)
+                           * block_size_in_pixels*mini_scale;
+
+      p_renderer.draw_filled_rectangle (coords (-350+x, 170+y), block_size_in_pixels*mini_scale,
+                                        block_size_in_pixels*mini_scale,
+                                        tetromino_color_rgba);
+    }
+
+  p_renderer.draw_text ("Next Block:", { 100, 320 }, 0xffffffff);
+
 }
 
 auto
