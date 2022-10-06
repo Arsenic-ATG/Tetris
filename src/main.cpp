@@ -18,8 +18,8 @@
 int
 main ()
 {
-  constexpr unsigned int disp_width = 1280;
-  constexpr unsigned int disp_height = 720;
+  constexpr unsigned int disp_width = 1024;
+  constexpr unsigned int disp_height = 576;
 
   if (!application::init_app (disp_width, disp_height))
     {
