@@ -173,6 +173,17 @@ game::start_playing () -> void
           m_board.static_blocks[i * m_board.width + j] = -1;
         }
     }
+
+  // init -- this code block intended to start the first tetromino and make next tetromino iterative 
+  std::random_device rd;
+  std::mt19937 gen (rd ());
+
+  std::uniform_int_distribution<> distrib (
+      0, static_cast<int> (tetromino_type::count) - 1);
+
+  m_active_tetromino.next_m_tetromino_type = static_cast<tetromino_type> (distrib (gen));
+  // end init -----
+
   generate_tetromino ();
   m_frames_per_fall_step = initial_frames_fall_step;
 }
@@ -409,9 +420,9 @@ game::draw_playing (renderer &p_renderer) -> void
   p_renderer.draw_text ("Score :", { 100, 100 }, 0xffffffff);
   p_renderer.draw_text (std::to_string (m_score), { 100, 130 }, 0xffffffff);
   p_renderer.draw_text ("Current Block:", { 100, 170 }, 0xffffffff);
-  // p_renderer.draw_text (std::to_string (static_cast<int> (
-  //   m_active_tetromino.m_tetromino_type)),
-  //                        { 100, 200 }, 0xffffffff);
+  p_renderer.draw_text (std::to_string (static_cast<int> (
+    m_active_tetromino.m_tetromino_type)),
+                         { 100, 200 }, 0xffffffff);
 
   // active tetromino
   for (auto i = 0u; i < 4; ++i)
@@ -441,6 +452,37 @@ game::draw_playing (renderer &p_renderer) -> void
     }
 
   p_renderer.draw_text ("Next Block:", { 100, 320 }, 0xffffffff);
+
+  p_renderer.draw_text (std::to_string (static_cast<int> (
+  m_active_tetromino.next_m_tetromino_type)),
+                        { 100, 350 }, 0xffffffff);
+
+  // active tetromino
+  for (auto i = 0u; i < 4; ++i)
+    {
+      const auto &tet = tetromino_data[static_cast<int> (
+          m_active_tetromino.next_m_tetromino_type)];
+      const auto &block_coords
+          = tet.block_coords[m_active_tetromino.m_rotation];
+
+
+      auto tetromino_color_rgba = tet.color;
+
+      const auto mini_scale = 0.7;  // small preview block scale
+
+      const auto x = board_offset_in_pixels.x
+                    //  + (m_active_tetromino.m_pos.x + block_coords[i].x)
+                     + ( block_coords[i].x)
+                           * block_size_in_pixels*mini_scale;
+      const auto y = board_offset_in_pixels.y
+                    //  + (m_active_tetromino.m_pos.y + block_coords[i].y)
+                    + ( block_coords[i].y)
+                           * block_size_in_pixels*mini_scale;
+
+      p_renderer.draw_filled_rectangle (coords (-350+x, 330+y), block_size_in_pixels*mini_scale,
+                                        block_size_in_pixels*mini_scale,
+                                        tetromino_color_rgba);
+    }
 
 }
 
@@ -611,17 +653,32 @@ game::draw (renderer &p_renderer) -> void
 auto
 game::generate_tetromino () -> bool
 {
+  // std::random_device rd;
+  // std::mt19937 gen (rd ());
+
+  // std::uniform_int_distribution<> distrib (
+  //     0, static_cast<int> (tetromino_type::count) - 1);
+
+  // m_active_tetromino.m_tetromino_type
+  //     = static_cast<tetromino_type> (distrib (gen));
+
+
+  m_active_tetromino.m_tetromino_type
+      = m_active_tetromino.next_m_tetromino_type;
+
+  m_active_tetromino.m_rotation = 0;
+  m_active_tetromino.m_pos.x = (m_board.width - 4) / 2;
+  m_active_tetromino.m_pos.y = 0;
+
+  // SWITCH LOCATION (FROM TOP TO HERE BELOW) TO DRAW OUT NEXT TETRONIMO 
   std::random_device rd;
   std::mt19937 gen (rd ());
 
   std::uniform_int_distribution<> distrib (
       0, static_cast<int> (tetromino_type::count) - 1);
 
-  m_active_tetromino.m_tetromino_type
-      = static_cast<tetromino_type> (distrib (gen));
-  m_active_tetromino.m_rotation = 0;
-  m_active_tetromino.m_pos.x = (m_board.width - 4) / 2;
-  m_active_tetromino.m_pos.y = 0;
+  m_active_tetromino.next_m_tetromino_type = static_cast<tetromino_type> (distrib (gen));
+       
 
   if (is_overlap (m_active_tetromino, m_board))
     return false;

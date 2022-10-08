@@ -38,6 +38,7 @@ enum class tetromino_type
 struct tetromino_instance
 {
   tetromino_type m_tetromino_type;
+  tetromino_type next_m_tetromino_type;
   coords m_pos;
   unsigned int m_rotation;
 };
