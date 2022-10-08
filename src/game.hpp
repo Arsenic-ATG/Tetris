@@ -72,6 +72,7 @@ public:
 
   auto start_playing () -> void;
   auto update_playing (const game_input &input) -> void;
+  auto draw_smalltetromino (renderer &p_renderer, int which_m_type, int x0, int y0 ) -> void;
   auto draw_playing (renderer &p_renderer) -> void;
 
   auto reset () -> void;
