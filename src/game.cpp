@@ -317,6 +317,52 @@ game::update_playing (const game_input &input) -> void
     }
 }
 
+
+/**@brief Draw the small windows for the current and next tetrominos (in queue)
+ *
+ * Draws a smaller icon of the tetromino to be displayed outside the falling board 
+ * this is a function to be used inside the game::draw_playing function 
+ *
+ * @param renderer object which is used to render stuff
+ * @param tetromino_index index of tetromino
+ * @param x0 starting x coordinate in screen from where to draw small tetromino window
+ * @param y0 starting y coordinate in screen from where to draw small tetromino window
+
+ * @return void
+ */
+auto
+game::draw_smalltetromino (renderer &p_renderer, int tetromino_index, int x0, int y0 ) -> void
+{
+  static auto block_size_in_pixels = 32;
+  auto board_offset_in_pixels = coords (0, 0);
+  
+  // active tetromino
+  for (auto i = 0u; i < 4; ++i)
+    {
+
+      const auto &tet = tetromino_data[tetromino_index];
+      const auto &block_coords
+          = tet.block_coords[m_active_tetromino.m_rotation];
+
+
+      auto tetromino_color_rgba = tet.color;
+
+      const auto mini_scale = 0.7;  // small preview block scale
+
+      const auto x = board_offset_in_pixels.x
+                    //  + (m_active_tetromino.m_pos.x + block_coords[i].x)
+                     + ( block_coords[i].x)
+                           * block_size_in_pixels*mini_scale;
+      const auto y = board_offset_in_pixels.y
+                    //  + (m_active_tetromino.m_pos.y + block_coords[i].y)
+                    + ( block_coords[i].y)
+                           * block_size_in_pixels*mini_scale;
+
+      p_renderer.draw_filled_rectangle (coords (x0+x, y0+y), block_size_in_pixels*mini_scale,
+                                        block_size_in_pixels*mini_scale,
+                                        tetromino_color_rgba);
+    }
+}
 /**@brief Draw the playing field
  *
  * Draw the latest state of the board and falling tetromino using the provided
@@ -424,32 +470,8 @@ game::draw_playing (renderer &p_renderer) -> void
     m_active_tetromino.m_tetromino_type)),
                          { 100, 200 }, 0xffffffff);
 
-  // active tetromino
-  for (auto i = 0u; i < 4; ++i)
-    {
-      const auto &tet = tetromino_data[static_cast<int> (
-          m_active_tetromino.m_tetromino_type)];
-      const auto &block_coords
-          = tet.block_coords[m_active_tetromino.m_rotation];
-
-
-      auto tetromino_color_rgba = tet.color;
-
-      const auto mini_scale = 0.7;  // small preview block scale
-
-      const auto x = board_offset_in_pixels.x
-                    //  + (m_active_tetromino.m_pos.x + block_coords[i].x)
-                     + ( block_coords[i].x)
-                           * block_size_in_pixels*mini_scale;
-      const auto y = board_offset_in_pixels.y
-                    //  + (m_active_tetromino.m_pos.y + block_coords[i].y)
-                    + ( block_coords[i].y)
-                           * block_size_in_pixels*mini_scale;
-
-      p_renderer.draw_filled_rectangle (coords (-350+x, 170+y), block_size_in_pixels*mini_scale,
-                                        block_size_in_pixels*mini_scale,
-                                        tetromino_color_rgba);
-    }
+  draw_smalltetromino (p_renderer, static_cast<int> (m_active_tetromino.m_tetromino_type),
+                           130, 210) ;
 
   p_renderer.draw_text ("Next Block:", { 100, 320 }, 0xffffffff);
 
@@ -457,32 +479,8 @@ game::draw_playing (renderer &p_renderer) -> void
   m_active_tetromino.next_m_tetromino_type)),
                         { 100, 350 }, 0xffffffff);
 
-  // active tetromino
-  for (auto i = 0u; i < 4; ++i)
-    {
-      const auto &tet = tetromino_data[static_cast<int> (
-          m_active_tetromino.next_m_tetromino_type)];
-      const auto &block_coords
-          = tet.block_coords[m_active_tetromino.m_rotation];
-
-
-      auto tetromino_color_rgba = tet.color;
-
-      const auto mini_scale = 0.7;  // small preview block scale
-
-      const auto x = board_offset_in_pixels.x
-                    //  + (m_active_tetromino.m_pos.x + block_coords[i].x)
-                     + ( block_coords[i].x)
-                           * block_size_in_pixels*mini_scale;
-      const auto y = board_offset_in_pixels.y
-                    //  + (m_active_tetromino.m_pos.y + block_coords[i].y)
-                    + ( block_coords[i].y)
-                           * block_size_in_pixels*mini_scale;
-
-      p_renderer.draw_filled_rectangle (coords (-350+x, 330+y), block_size_in_pixels*mini_scale,
-                                        block_size_in_pixels*mini_scale,
-                                        tetromino_color_rgba);
-    }
+  draw_smalltetromino (p_renderer, static_cast<int> (m_active_tetromino.next_m_tetromino_type),
+                           130, 360) ;
 
 }
 
