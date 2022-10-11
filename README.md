@@ -34,7 +34,7 @@ perform the following steps to build the project on your native machine :
 
 2. Navigate to `src` subdirectory of repository
 
-3. Now compile the program  (depending on wether you want to build the online deployable version or native build, follow one of the following steps )
+3. Now compile the program  (depending on whether you want to build the online deployable version or native build, follow one of the following steps )
 
    **caveat:** currently the repository doesn't have a build system/script to automate the build process, so sadly for now, manual build is the only way to get the project running on the system (If you are interested in setting up one for the project then feel free to open an issue discussing the same)
 
