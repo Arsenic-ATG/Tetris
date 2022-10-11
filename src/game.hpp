@@ -93,6 +93,7 @@ private:
     game_over,
   };
 
+  std::vector<int> bag; // bag of tetrominos (fill it with 7 pieces until empty, then fill again - 7-bag randomizer) 
   int m_frames_until_fall;
   int m_frames_per_fall_step; // control speed of the game
   tetromino_instance m_active_tetromino;
