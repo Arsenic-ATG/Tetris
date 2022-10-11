@@ -6,6 +6,7 @@
 #include "game.hpp"
 #include "renderer.hpp"
 #include <random>
+#include <algorithm>
 
 static constexpr auto board_width = 10u;
 static constexpr auto board_height = 20u;
@@ -174,15 +175,30 @@ game::start_playing () -> void
         }
     }
 
-  // init -- this code block intended to start the first tetromino and make next tetromino iterative 
-  std::random_device rd;
-  std::mt19937 gen (rd ());
+  // ------- INIT --------------------------------------------------------------------------
+  //this code block intended to start the first tetromino and make next tetromino iterative 
+  
+  // std::random_device rd;
+  // std::mt19937 gen (rd ());
+  // std::uniform_int_distribution<> distrib (
+  //     0, static_cast<int> (tetromino_type::count) - 1);
+  // m_active_tetromino.next_m_tetromino_type = static_cast<tetromino_type> (distrib (gen));
+  // ^^ FORMER METHOD: random draws of ints in range [0,6] for every iter
+  
+  // CURRENT METHOD: 7-bag randomizer; fills bag with 7 different tetromino pieces in ANY order,
+  // picks from bag until empty, and then re-fills with 7 pieces again
+  bag = {0,1,2,3,4,5,6}; //   fill bag of tetrominos with 7 pieces
+  std::random_device rd_bag;
+  std::mt19937 gen_bag (rd_bag ());
+  std::shuffle(bag.begin(), bag.end(), gen_bag);
 
-  std::uniform_int_distribution<> distrib (
-      0, static_cast<int> (tetromino_type::count) - 1);
+  // pick tetromino [index] from bag
+  int tetro_chosen = bag.back(); // pick from bag
+  bag.pop_back(); // remove from bag
 
-  m_active_tetromino.next_m_tetromino_type = static_cast<tetromino_type> (distrib (gen));
-  // end init -----
+  m_active_tetromino.next_m_tetromino_type = static_cast<tetromino_type> (tetro_chosen);
+
+  // ----- END INIT --------------------------------------------------------------------------
 
   generate_tetromino ();
   m_frames_per_fall_step = initial_frames_fall_step;
@@ -651,16 +667,6 @@ game::draw (renderer &p_renderer) -> void
 auto
 game::generate_tetromino () -> bool
 {
-  // std::random_device rd;
-  // std::mt19937 gen (rd ());
-
-  // std::uniform_int_distribution<> distrib (
-  //     0, static_cast<int> (tetromino_type::count) - 1);
-
-  // m_active_tetromino.m_tetromino_type
-  //     = static_cast<tetromino_type> (distrib (gen));
-
-
   m_active_tetromino.m_tetromino_type
       = m_active_tetromino.next_m_tetromino_type;
 
@@ -668,15 +674,22 @@ game::generate_tetromino () -> bool
   m_active_tetromino.m_pos.x = (m_board.width - 4) / 2;
   m_active_tetromino.m_pos.y = 0;
 
-  // SWITCH LOCATION (FROM TOP TO HERE BELOW) TO DRAW OUT NEXT TETRONIMO 
-  std::random_device rd;
-  std::mt19937 gen (rd ());
+  // NEXT TETROMINO -------------------------------
 
-  std::uniform_int_distribution<> distrib (
-      0, static_cast<int> (tetromino_type::count) - 1);
+  if ( bag.empty() ){
+    // re-fill bag of tetrominos with 7 pieces [ if empty ]
+    bag = {0,1,2,3,4,5,6};
+    std::random_device rd_bag;
+    std::mt19937 gen_bag (rd_bag ());
+    std::shuffle(bag.begin(), bag.end(), gen_bag);
+  }
+  // pick tetromino [index] from bag
+  int tetro_chosen = bag.back(); // pick from bag
+  bag.pop_back(); // remove from bag
 
-  m_active_tetromino.next_m_tetromino_type = static_cast<tetromino_type> (distrib (gen));
-       
+  m_active_tetromino.next_m_tetromino_type = static_cast<tetromino_type> (tetro_chosen);
+
+  // -------------------------------------------
 
   if (is_overlap (m_active_tetromino, m_board))
     return false;
