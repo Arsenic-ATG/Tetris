@@ -175,28 +175,19 @@ game::start_playing () -> void
         }
     }
 
-  // ------- INIT --------------------------------------------------------------------------
-  //this code block intended to start the first tetromino and make next tetromino iterative 
-  
+  // ------- INIT --------------------------------------------------------------------------  
   // std::random_device rd;
   // std::mt19937 gen (rd ());
   // std::uniform_int_distribution<> distrib (
   //     0, static_cast<int> (tetromino_type::count) - 1);
-  // m_active_tetromino.next_m_tetromino_type = static_cast<tetromino_type> (distrib (gen));
   // ^^ FORMER METHOD: random draws of ints in range [0,6] for every iter
   
   // CURRENT METHOD: 7-bag randomizer; fills bag with 7 different tetromino pieces in ANY order,
-  // picks from bag until empty, and then re-fills with 7 pieces again
+  // picks from bag until half empty (when bag.size() < 4), and then fills with 7+ pieces
   bag = {0,1,2,3,4,5,6}; //   fill bag of tetrominos with 7 pieces
   std::random_device rd_bag;
   std::mt19937 gen_bag (rd_bag ());
   std::shuffle(bag.begin(), bag.end(), gen_bag);
-
-  // pick tetromino [index] from bag
-  int tetro_chosen = bag.back(); // pick from bag
-  bag.pop_back(); // remove from bag
-
-  m_active_tetromino.next_m_tetromino_type = static_cast<tetromino_type> (tetro_chosen);
 
   // ----- END INIT --------------------------------------------------------------------------
 
@@ -481,22 +472,21 @@ game::draw_playing (renderer &p_renderer) -> void
   m_score = 100 * m_lines_cleared;
   p_renderer.draw_text ("Score :", { 100, 100 }, 0xffffffff);
   p_renderer.draw_text (std::to_string (m_score), { 100, 130 }, 0xffffffff);
-  p_renderer.draw_text ("Current Block:", { 100, 170 }, 0xffffffff);
-  p_renderer.draw_text (std::to_string (static_cast<int> (
-    m_active_tetromino.m_tetromino_type)),
-                         { 100, 200 }, 0xffffffff);
 
-  draw_smalltetromino (p_renderer, static_cast<int> (m_active_tetromino.m_tetromino_type),
-                           130, 210) ;
+  // Next 3 blocks. These are determined from the contents of the tetrominos `bag` variable
+  p_renderer.draw_text ("Next Blocks:", { 100, 170 }, 0xffffffff);
 
-  p_renderer.draw_text ("Next Block:", { 100, 320 }, 0xffffffff);
+  int next_tetro = bag.back(), next_tetro2 = bag[bag.size()-2], next_tetro3 = bag[bag.size()-3];
 
-  p_renderer.draw_text (std::to_string (static_cast<int> (
-  m_active_tetromino.next_m_tetromino_type)),
-                        { 100, 350 }, 0xffffffff);
+  p_renderer.draw_text (std::to_string (static_cast<int> (next_tetro)), { 100, 200 }, 0xffffffff);
+  draw_smalltetromino (p_renderer, static_cast<int> (next_tetro), 130, 210) ;
 
-  draw_smalltetromino (p_renderer, static_cast<int> (m_active_tetromino.next_m_tetromino_type),
-                           130, 360) ;
+  p_renderer.draw_text (std::to_string (static_cast<int> ( next_tetro2 )), { 100, 350 }, 0xffffffff);
+  draw_smalltetromino (p_renderer, static_cast<int> (next_tetro2 ), 130, 360) ;
+
+  p_renderer.draw_text (std::to_string (static_cast<int> ( next_tetro3 )), { 100, 500 }, 0xffffffff);
+  draw_smalltetromino (p_renderer, static_cast<int> (next_tetro3 ), 130, 510) ;
+
 
 }
 
@@ -667,27 +657,29 @@ game::draw (renderer &p_renderer) -> void
 auto
 game::generate_tetromino () -> bool
 {
-  m_active_tetromino.m_tetromino_type
-      = m_active_tetromino.next_m_tetromino_type;
+  // pick tetromino [index] from bag
+  int tetro_chosen = bag.back(); // pick from bag
+  bag.pop_back(); // remove from bag
+
+  m_active_tetromino.m_tetromino_type  = static_cast<tetromino_type> (tetro_chosen) ;
 
   m_active_tetromino.m_rotation = 0;
   m_active_tetromino.m_pos.x = (m_board.width - 4) / 2;
   m_active_tetromino.m_pos.y = 0;
 
-  // NEXT TETROMINO -------------------------------
-
-  if ( bag.empty() ){
-    // re-fill bag of tetrominos with 7 pieces [ if empty ]
-    bag = {0,1,2,3,4,5,6};
+  // CONSTRAINT TO KEEP BAG FILLED AND BE ABLE TO PREDICT NEXT 3 TETROMINOS ------------
+  if ( bag.size() < 4 ){
+    // re-fill bag of tetrominos with 7+ shuffled pieces [ if bag has less than 4 tetrominos remaining]
+    std::vector<int> pieces = {0,1,2,3,4,5,6};
     std::random_device rd_bag;
     std::mt19937 gen_bag (rd_bag ());
-    std::shuffle(bag.begin(), bag.end(), gen_bag);
-  }
-  // pick tetromino [index] from bag
-  int tetro_chosen = bag.back(); // pick from bag
-  bag.pop_back(); // remove from bag
+    std::shuffle(pieces.begin(), pieces.end(), gen_bag);
 
-  m_active_tetromino.next_m_tetromino_type = static_cast<tetromino_type> (tetro_chosen);
+    // insert pieces to front of array because tetrominos are drawn from back
+    pieces.insert( pieces.end(), bag.begin(), bag.end() );
+    bag = pieces;   
+  }
+
 
   // -------------------------------------------
 
