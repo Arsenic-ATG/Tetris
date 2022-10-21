@@ -71,7 +71,7 @@ perform the following steps to build the project on your native machine :
 
     - run the built executable.
 
-These instructins are meant to be understood by developers of every level, so if you are unable to understand anything or face any difficulty in building the project then make sure to complaint about the same by opening an issue or in discuss section.
+These instructions are meant to be understood by developers of every level, so if you are unable to understand anything or face any difficulty in building the project then make sure to complaint about the same by opening an issue or in discuss section.
 
 ## For Hacktoberfest
 
