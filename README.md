@@ -4,7 +4,7 @@ Tetris™ clone created in C++ and SDL, The project is also designed to be compi
 | [Start a new game](https://tetrisplusplus.netlify.app/) |
 | --------------------------------------- |
 
-![](static/29300.png)
+[![](static/29300.png)](https://tetrisplusplus.netlify.app/)
 
 
 ## controls
