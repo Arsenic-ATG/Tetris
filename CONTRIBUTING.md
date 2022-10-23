@@ -5,18 +5,18 @@ If you are looking to help to with a code contribution,
 The project uses
 
 - C++ (17 and above standards)
-- SDL2.0 (for graphics and redering)
+- SDL2.0 (for graphics and rendering)
 - emscripten (for compiling the source to WebAsm, having knowledge about this is totally optional)
 
 If you don't feel ready to make a code contribution yet, no problem! You can also check out the [documentation issues](https://github.com/Arsenic-ATG/Tetris/issues?q=is%3Aissue+is%3Aopen+label%3Adocumentation) or suggest ideas about how the game can be improved via creating a new issue ( keep in mind that no idea is stupid ).
 
 If you are interested in making a code contribution and would like to learn more about the technologies that we use, check out the list below.
 
-TODO: add links to usefull resources to learn C++ and SDL2.0 (if you know some then you can also contribute )
+TODO: Add links to useful resources to learn C++ and SDL2.0 (if you know something then you can also contribute )
 
 ## How do I make a contribution?
 
-Never made an open source contribution before? Wondering how contributions work in the in our project? Here's a quick rundown!
+Never made an open source contribution before? Wondering how contributions work in our project? Here's a quick rundown!
 
 1. Find an issue that you are interested in addressing or a feature that you would like to add.
 2. Fork the repository ( So that you can have a copy of repository you can hack upon )
@@ -35,8 +35,8 @@ Never made an open source contribution before? Wondering how contributions work 
 
 ## Where can I go for help?
 
-If you need help, you can ask questions via the discuss section of the repository or open an issure regarding the same.
+If you need help, you can ask questions via the discuss section of the repository or open an issue regarding the same.
 
 ## What does the Code of Conduct mean for me?
 
-Our Code of Conduct means that you are responsible for treating everyone on the project with respect and courtesy regardless of their identity. If you are the victim of any inappropriate behavior or comments as described in our [Code of Conduct](TODO: add code of conduct link), we are here for you and will do the best to ensure that the abuser is reprimanded appropriately, per our code.
+Our Code of Conduct means that you are responsible for treating everyone on the project with respect and courtesy regardless of their identity. If you are the victim of any inappropriate behaviour or comments as described in our [Code of Conduct](TODO: add code of conduct link), we are here for you and will do the best to ensure that the abuser is reprimanded appropriately, as per our code.
