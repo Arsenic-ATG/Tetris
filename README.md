@@ -48,7 +48,7 @@ perform the following steps to build the project on your native machine :
 
     - Executing the following command is I think all you need to compile the project ( do note that Emscripten tend to take relatively long time than your average C++ compiler to build the project, and compilling for the first time would almost always take much longer to build than subsequent builds )
     ``` shell
-    $ em++ -std=c++17 renderer.cpp game.cpp app.cpp main.cpp -O2 -s TOTAL_MEMORY=67108864 -s USE_SDL=2 -s USE_SDL_TTF=2 --preload-file assets -o ../build/index.js
+    $ em++ -std=c++17 renderer.cpp game.cpp app.cpp main.cpp -O2 -s TOTAL_MEMORY=67108864 -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_MIXER=2 --preload-file assets -o ../build/index.js
     ```
 
     TODO: explain what the above command does in detail
