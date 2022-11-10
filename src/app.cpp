@@ -12,6 +12,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include <chrono>
 #include <cstdio>
 
@@ -69,6 +70,19 @@ application::init_app (const unsigned int width, const unsigned int height)
     }
 
   printf ("SDL initialised\n");
+
+
+  // Initialize SDL video and audio systems
+  SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+
+  // Initialize SDL mixer
+  Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+  // Load background music {made with Bosca Ceoil https://boscaceoil.net/}
+  Mix_Music *backgroundSound = Mix_LoadMUS("assets/tetris.wav");
+
+  // Start the background music
+  Mix_PlayMusic(backgroundSound, -1);
 
   SDL_version compiled_version;
   SDL_version linked_version;
