@@ -23,7 +23,7 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
                 { { 0, 2 }, { 1, 2 }, { 2, 2 }, { 3, 2 } },
                 { { 1, 0 }, { 1, 1 }, { 1, 2 }, { 1, 3 } },
             },
-            0x00ffffff,
+            0xd0edff, // Light blue
         },
         // J
         {
@@ -33,7 +33,7 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
                 { { 0, 1 }, { 1, 1 }, { 2, 1 }, { 2, 2 } },
                 { { 1, 0 }, { 1, 1 }, { 0, 2 }, { 1, 2 } },
             },
-            0x0000ffff,
+            0xfffed9, // Light yellow
         },
         // L
         {
@@ -43,7 +43,7 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
                 { { 0, 1 }, { 1, 1 }, { 2, 1 }, { 0, 2 } },
                 { { 0, 0 }, { 1, 0 }, { 1, 1 }, { 1, 2 } },
             },
-            0xff7f00ff,
+            0xa9a9a9ff, // Dark gray
         },
         // O
         {
@@ -53,7 +53,7 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
                 { { 1, 0 }, { 2, 0 }, { 1, 1 }, { 2, 1 } },
                 { { 1, 0 }, { 2, 0 }, { 1, 1 }, { 2, 1 } },
             },
-            0xffff00ff,
+            0xdcdcdcff, // Light gray
         },
         // S
         {
@@ -63,7 +63,7 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
                 { { 1, 1 }, { 2, 1 }, { 0, 2 }, { 1, 2 } },
                 { { 0, 0 }, { 0, 1 }, { 1, 1 }, { 1, 2 } },
             },
-            0x00ff00ff,
+            0x98fb98ff, // Pale green
         },
         // T
         {
@@ -73,7 +73,7 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
                 { { 0, 1 }, { 1, 1 }, { 2, 1 }, { 1, 2 } },
                 { { 1, 0 }, { 0, 1 }, { 1, 1 }, { 1, 2 } },
             },
-            0x800080ff,
+            0xe1cff8, // Plum
         },
         // Z
         {
@@ -83,9 +83,12 @@ static const tetromino tetromino_data[static_cast<int> (tetromino_type::count)]
                 { { 0, 1 }, { 1, 1 }, { 1, 2 }, { 2, 2 } },
                 { { 1, 0 }, { 0, 1 }, { 1, 1 }, { 0, 2 } },
             },
-            0xff0000ff,
+            0xffb6c1ff, // Light pink
         }
-      };
+    };
+
+
+
 
 // helpers
 
