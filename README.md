@@ -27,6 +27,7 @@ Tetris™ clone created in C++ and SDL, The project is also designed to be compi
 - [Emscripten](https://emscripten.org) : to compile the program to WebAsm
 - [SDL2.0 library](https://github.com/libsdl-org/SDL) :for rendering stuff on screen.
 - [SDL TTF library](https://github.com/libsdl-org/SDL_ttf) : for rendering font from TrueType (.ttf) font files.
+- [SDL Mixer library](https://github.com/libsdl-org/SDL_mixer) : for playing music and sounds.
 
 ## Build instructions
 ( This section or README.md is still under construction, you may help in improving this by opening a PR/issue regarding the same )
@@ -66,10 +67,10 @@ perform the following steps to build the project on your native machine :
 
     - Just use your native C++ compiler to build and executable from all the source files (order in which they should be provided to the command should not matter in most cases )
 
-    - Make sure to link `SDL2` and `SDL2_ttf` libraries properly.
+    - Make sure to link `SDL2`, `SDL2_ttf` and `SDL2_mixer` libraries properly.
 
     ```shell
-     $ g++ -std=c++17 renderer.cpp game.cpp app.cpp main.cpp -O2 -lSDL2_ttf -lSDL2
+     $ g++ -std=c++17 renderer.cpp game.cpp app.cpp main.cpp -O2 -lSDL2_ttf -lSDL2_mixer -lSDL2
     ```
 
     - run the built executable.
