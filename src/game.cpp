@@ -1,5 +1,5 @@
 /**@file game.cpp
- * @brief containst function that implements the game logic.
+ * @brief contains function that implements the game logic.
  *
  */
 
