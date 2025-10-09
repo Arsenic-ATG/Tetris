@@ -115,7 +115,7 @@ renderer::renderer (SDL_Window &window, unsigned int width,
                "linear"); // make the scaled rendering look smoother
 
   int default_font_size = 32;
-  m_font = TTF_OpenFont ("assets/clacon.ttf", default_font_size);
+  m_font = TTF_OpenFont ("src/assets/clacon.ttf", default_font_size);
   if (!m_font)
     {
       fprintf (stderr, "TTF_OpenFont failed: %s\n", TTF_GetError ());

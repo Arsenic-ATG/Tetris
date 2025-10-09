@@ -30,35 +30,46 @@ Tetris™ clone created in C++ and SDL, The project is also designed to be compi
 - [SDL Mixer library](https://github.com/libsdl-org/SDL_mixer) : for playing music and sounds.
 
 ## Build instructions
-( This section or README.md is still under construction, you may help in improving this by opening a PR/issue regarding the same )
 
-perform the following steps to build the project on your native machine :
+Perform the following steps to build the project on your native machine:
 
-1. Clone/download the repository
+1. Clone/download the repository:
 
-2. Navigate to `src` subdirectory of repository
+From the original author:
 
-3. Now compile the program  (depending on whether you want to build the online deployable version or native build, follow one of the following steps )
+```sh
+git clone https://github.com/wip/Tetris
+```
 
-   **caveat:** currently the repository doesn't have a build system/script to automate the build process, so sadly for now, manual build is the only way to get the project running on the system (If you are interested in setting up one for the project then feel free to open an issue discussing the same)
+From Pramod's fork:
+
+```sh
+git clone https://github.com/p13i/Tetris
+```
+
+1. Now compile the program (depending on whether you want to build the online deployable version or native build, follow one of the following steps):
 
     3.1. **WebAsm build using emscripten** :
 
-
     To build the online deployable version of the game, we would be using `emscripten` to compile the program to webasm.
 
-    - Executing the following command is I think all you need to compile the project ( do note that Emscripten tend to take relatively long time than your average C++ compiler to build the project, and compilling for the first time would almost always take much longer to build than subsequent builds )
-    ``` shell
-    $ em++ -std=c++17 renderer.cpp game.cpp app.cpp main.cpp -O2 -s TOTAL_MEMORY=67108864 -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_MIXER=2 --preload-file assets -o ../build/index.js
+    ```sh
+    $ make setup-emsdk
     ```
 
-    TODO: explain what the above command does in detail
+    ```sh
+    $ make activate-emsdk
+    ```
+
+    ```sh
+    $ make build
+    ```
 
     - The build files should be in [`build`](./build) subdirectory of the repository
     - Once in build directory, you can simply use `emrun` to run the HTML pages via a locally launched web server.
 
-    ``` shell
-    $ emrun index.html
+    ```sh
+    $ make serve
     ```
 
     FWIW: you may also like to visit [emscripten documentation](https://emscripten.org/docs/compiling/Building-Projects.html#building-projects) regarding more info about building a project with emscripten if you are interesting to know more about the same.
