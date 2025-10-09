@@ -80,11 +80,16 @@ git clone https://github.com/p13i/Tetris
 
     - Make sure to link `SDL2`, `SDL2_ttf` and `SDL2_mixer` libraries properly.
 
-    ```shell
-     $ g++ -std=c++17 renderer.cpp game.cpp app.cpp main.cpp -O2 -lSDL2_ttf -lSDL2_mixer -lSDL2
+    ```sh
+    make build-g++
     ```
 
     - run the built executable.
+
+    ```sh
+    chmod +x ./a.out
+    ./a.out
+    ```
 
 These instructions are meant to be understood by developers of every level, so if you are unable to understand anything or face any difficulty in building the project then make sure to complaint about the same by opening an issue or in discuss section.
 
