@@ -118,3 +118,8 @@ _deps
 .AppleDouble
 .LSOverride
 
+bazel-bin
+bazel-out
+bazel-testlogs
+bazel-Tetris
+MODULE.bazel.lock
