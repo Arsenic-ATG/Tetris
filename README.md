@@ -35,16 +35,8 @@ Perform the following steps to build the project on your native machine:
 
 1. Clone/download the repository:
 
-From the original author:
-
 ```sh
-git clone https://github.com/wip/Tetris
-```
-
-From Pramod's fork:
-
-```sh
-git clone https://github.com/p13i/Tetris
+git clone https://github.com/Arsenic-ATG/Tetris
 ```
 
 1. Now compile the program (depending on whether you want to build the online deployable version or native build, follow one of the following steps):
@@ -54,22 +46,22 @@ git clone https://github.com/p13i/Tetris
     To build the online deployable version of the game, we would be using `emscripten` to compile the program to webasm.
 
     ```sh
-    $ make setup-emsdk
+    make setup-emsdk
     ```
 
     ```sh
-    $ make activate-emsdk
+    make activate-emsdk
     ```
 
     ```sh
-    $ make build
+    make build
     ```
 
     - The build files should be in [`build`](./build) subdirectory of the repository
     - Once in build directory, you can simply use `emrun` to run the HTML pages via a locally launched web server.
 
     ```sh
-    $ make serve
+    make serve
     ```
 
     FWIW: you may also like to visit [emscripten documentation](https://emscripten.org/docs/compiling/Building-Projects.html#building-projects) regarding more info about building a project with emscripten if you are interesting to know more about the same.
