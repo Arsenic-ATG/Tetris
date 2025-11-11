@@ -79,7 +79,7 @@ application::init_app (const unsigned int width, const unsigned int height)
   Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 
   // Load background music {made with Bosca Ceoil https://boscaceoil.net/}
-  Mix_Music *backgroundSound = Mix_LoadMUS("assets/tetris.wav");
+  Mix_Music *backgroundSound = Mix_LoadMUS("src/assets/tetris.wav");
 
   // Start the background music
   Mix_PlayMusic(backgroundSound, -1);
